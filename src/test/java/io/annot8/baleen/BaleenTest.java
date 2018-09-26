@@ -52,8 +52,7 @@ public class BaleenTest {
 
     Text text = item.getContents(Text.class).findFirst().get();
 
-
-    assertThat(text.getAnnotations().getAll()).anyMatch(a -> a.getType().equals("baleen.CommsIdentifier"));
+    assertThat(text.getAnnotations().getAll()).anyMatch(a -> a.getType().equals("baleen.entity.commsIdentifier"));
   }
 
 }

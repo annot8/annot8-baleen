@@ -2,6 +2,7 @@ package io.annot8.baleen.utils;
 
 import static io.annot8.baleen.Constants.BALEEN_ID;
 import static io.annot8.baleen.Constants.BALEEN_VALUE;
+import static io.annot8.baleen.Constants.PREFIX;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
@@ -65,12 +66,13 @@ public class JCasExtractor {
   private final Multimap<String, Annotation> referentAnnotations = HashMultimap.create();
   private final Map<String, Annotation> baleenIdToAnnotation = new HashMap<>();
   private final Map<String, Annotation> baleenIdToWordToken = new HashMap<>();
-
+  private final BaleenTypeMapper typeMapper;
 
   public JCasExtractor(JCas jCas, AnnotationStore annotations, GroupStore groups) {
     this.jCas = jCas;
     this.annotations = annotations;
     this.groups = groups;
+    this.typeMapper = new BaleenTypeMapper();
   }
 
 
@@ -109,14 +111,13 @@ public class JCasExtractor {
         .forEach(consumer);
   }
 
-  private Annotation.Builder createAnnotation(BaleenAnnotation t, String type) {
+  private Annotation.Builder createAnnotation(BaleenAnnotation t) {
 
     Builder builder = annotations.create()
-        .withType(type)
+        .withType(typeMapper.fromBaleenToAnnot8(t).orElse(Constants.PREFIX + ".unknown"))
         .withBounds(new SpanBounds(t.getBegin(), t.getEnd()))
         .withProperty(Constants.BALEEN_ID, t.getExternalId())
         .withProperty(Constants.BALEEN_TYPE, t.getType().getName());
-
 
     if(t instanceof Entity) {
       Entity e = (Entity)t;
@@ -127,9 +128,10 @@ public class JCasExtractor {
     return builder;
   }
 
+
   private  void addWordToken(WordToken t) {
     try {
-      Annotation annotation = createAnnotation(t, Constants.TYPE_WORD_TOKEN)
+      Annotation annotation = createAnnotation(t)
           .withProperty("pos", t.getPartOfSpeech())
           .withProperty("sentenceOrder", t.getSentenceOrder())
           .save();
@@ -144,7 +146,7 @@ public class JCasExtractor {
 
   private  void addSentence(Sentence t) {
     try {
-      createAnnotation(t, Constants.TYPE_SENTENCE)
+      createAnnotation(t)
           .save();
     } catch(Annot8Exception e) {
       LOGGER.error("Unable to annotate sentence", e);
@@ -154,7 +156,7 @@ public class JCasExtractor {
 
   private  void addPhraseChunk(PhraseChunk t) {
     try {
-      createAnnotation(t, Constants.TYPE_CHUNK)
+      createAnnotation(t)
           .withProperty("chunkType", t.getChunkType())
           // TODO: Other properties
           .save();
@@ -165,7 +167,7 @@ public class JCasExtractor {
 
   private void addParagraph(Paragraph t) {
     try {
-      createAnnotation(t, Constants.TYPE_PARAGRAPH)
+      createAnnotation(t)
           .save();
     } catch(Annot8Exception e) {
       LOGGER.error("Unable to annotate paragraph", e);
@@ -174,7 +176,7 @@ public class JCasExtractor {
 
   private void addWordLemma(WordLemma t) {
     try {
-      createAnnotation(t, Constants.TYPE_LEMMA)
+      createAnnotation(t)
           .withProperty("lemma", t.getLemmaForm())
           .withProperty("pos", t.getPartOfSpeech())
           .save();
@@ -198,7 +200,7 @@ public class JCasExtractor {
 
   private void addStructure(Structure m) {
     try {
-      createAnnotation(m, Constants.structualType(m))
+      createAnnotation(m)
           .withProperty(Constants.STRUCTURAL_DEPTH, m.getDepth())
           .withProperty(Constants.STRUCTURAL_ID, m.getElementId())
           .withProperty(Constants.STRUCTURAL_CLASS, m.getElementClass())
@@ -213,7 +215,7 @@ public class JCasExtractor {
   private void addPublishedId(PublishedId m) {
 
     try {
-      createAnnotation(m, Constants.TYPE_PUBLISHED_ID)
+      createAnnotation(m)
           .withProperty("publishedIdType", m.getPublishedIdType())
           .withProperty("publishedId", m.getValue())
           .save();
@@ -225,7 +227,7 @@ public class JCasExtractor {
   private void addProtectiveMarking(ProtectiveMarking m) {
 
     try {
-      createAnnotation(m, Constants.TYPE_PROTECTIVE_MARKING)
+      createAnnotation(m)
           .withProperty("caveats", UimaTypesUtils.toList(m.getCaveats()))
           .withProperty("releasability", UimaTypesUtils.toList(m.getReleasability()))
           .withProperty("classification", m.getClassification())
@@ -238,7 +240,7 @@ public class JCasExtractor {
   private void addMetadata(Metadata m) {
     try {
       annotations.create()
-          .withType(Constants.TYPE_METADATA)
+          .withType(typeMapper.fromBaleenToAnnot8(m).orElse(PREFIX + "metadata"))
           .withProperty(Constants.METADATA_KEY, m.getKey())
           .withProperty(Constants.METADATA_VALUE, m.getValue())
           .withBounds(NoBounds.getInstance())
@@ -250,7 +252,7 @@ public class JCasExtractor {
 
   private void addTextBlock(uk.gov.dstl.baleen.types.language.Text block) {
     try {
-      createAnnotation(block, Constants.TYPE_LANGUAGE_TEXT)
+      createAnnotation(block)
           .save();
     } catch(Annot8Exception e) {
       LOGGER.error("Unable to annotate text block", e);
@@ -298,10 +300,7 @@ public class JCasExtractor {
 
     try {
 
-      Builder builder = annotations.create()
-          .withBounds(new SpanBounds(entity.getBegin(), entity.getEnd()))
-          .withType(entity.getTypeName())
-          .withProperty(BALEEN_ID, entity.getExternalId());
+      Builder builder = createAnnotation(entity);
 
       if(entity instanceof Person) {
         Person e = (Person)entity;

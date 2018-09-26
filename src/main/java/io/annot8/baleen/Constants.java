@@ -34,10 +34,10 @@ public final class Constants {
   public static final String BALEEN_TYPE = PREFIX + "type";
 
 
-  public static final String STRUCTURAL_PREFIX = PREFIX + "structural.";
-  public static final String STRUCTURAL_DEPTH = STRUCTURAL_PREFIX + "depth";
-  public static final String STRUCTURAL_ID = STRUCTURAL_PREFIX + "id";
-  public static final String STRUCTURAL_CLASS = STRUCTURAL_PREFIX + "class";
+  private static final String STRUCTURAL_PREFIX = "structural";
+  public static final String STRUCTURAL_DEPTH = STRUCTURAL_PREFIX + "Depth";
+  public static final String STRUCTURAL_ID = STRUCTURAL_PREFIX + "Id";
+  public static final String STRUCTURAL_CLASS = STRUCTURAL_PREFIX + "Class";
 
   // Group types
 
@@ -45,24 +45,15 @@ public final class Constants {
   public static final String GROUP_RELATION = PREFIX + "relation";
   public static final String GROUP_DEPENDENCY = PREFIX + "dependency";
 
-  // Annotation types
+  // Special annotation types (othres are PREFIX + baleen.getType().getShortName())
 
   public static final  String TYPE_WORD_TOKEN = PREFIX + "token";
-  public static final  String TYPE_SENTENCE = PREFIX + "sentence";
 
-  public static final  String TYPE_METADATA = "metadata";
-  public static final String TYPE_LANGUAGE_TEXT = PREFIX + "types.text";
-  public static final String TYPE_PUBLISHED_ID = PREFIX + "publishedId";
+  public static final String TYPE_LANGUAGE_TEXT = PREFIX + "block";
   public static final String TYPE_LEMMA = PREFIX + "lemma";
-  public static final String TYPE_PARAGRAPH = PREFIX + "paragraph";
-  public static final String TYPE_CHUNK = PREFIX + "chunk";
-
-  public static final String TYPE_PROTECTIVE_MARKING = PREFIX + "protectiveMarking";
-
-
-  public static String structualType(Structure s) {
-    return String.format(STRUCTURAL_PREFIX+".%s", s.getType().getShortName());
-  }
+  public static final String TYPE_PHRASE_CHUNK = PREFIX + "chunk";
+  public static final String TYPE_ENTITY_PREFIX = PREFIX + "entity.";
+  public static final String TYPE_STRUCTURAL_PREFIX = PREFIX + "structural.";
 
   // Content properties
 
