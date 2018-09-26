@@ -19,7 +19,7 @@ import java.io.File;
 import java.util.List;
 import org.junit.Test;
 
-public class BaleenTest {
+public class BaleenIT {
 
   @Test
   public  void test() throws IncompleteException {
