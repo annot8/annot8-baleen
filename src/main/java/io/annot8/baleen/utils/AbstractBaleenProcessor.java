@@ -15,7 +15,6 @@ import io.committed.baleen.embedded.ConsumerOutputConverter;
 import io.committed.baleen.embedded.EmbeddableBaleen;
 import io.committed.baleen.embedded.EmbeddedBaleenFactory;
 import java.io.InputStream;
-import java.util.MissingResourceException;
 import java.util.function.Consumer;
 import org.apache.uima.jcas.JCas;
 import uk.gov.dstl.baleen.exceptions.BaleenException;
@@ -23,12 +22,13 @@ import uk.gov.dstl.baleen.exceptions.BaleenException;
 public abstract class AbstractBaleenProcessor extends AbstractComponent implements Processor {
 
   private static final String DEFAULT_SOURCE = "annot8";
+  private static final int DEFAULT_POOL_SIZE = 1;
 
   private EmbeddableBaleen baleen;
 
   @Override
   public void configure(Context context)
-      throws BadConfigurationException, MissingResourceException {
+      throws BadConfigurationException {
 
     try {
       baleen = EmbeddedBaleenFactory
@@ -49,7 +49,7 @@ public abstract class AbstractBaleenProcessor extends AbstractComponent implemen
   protected abstract String getYaml(Context context);
 
   protected int getPoolSize(Context context) {
-    return 1;
+    return DEFAULT_POOL_SIZE;
   }
 
   @Override
@@ -69,7 +69,8 @@ public abstract class AbstractBaleenProcessor extends AbstractComponent implemen
 
   protected abstract void processItem(Item item) throws BaleenException, Annot8Exception;
 
-  protected void processWithBaleen(Content<?> content, InputStream is, Consumer<JCas> annotatorCreator, Consumer<JCas> consumer)
+  protected void processWithBaleen(Content<?> content, InputStream is,
+      Consumer<JCas> annotatorCreator, Consumer<JCas> consumer)
       throws BaleenException {
     String source = getSource(content);
     baleen.process(source, is, annotatorCreator, new ConsumerOutputConverter(consumer));

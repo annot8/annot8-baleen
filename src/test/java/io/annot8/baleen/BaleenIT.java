@@ -22,7 +22,7 @@ import org.junit.Test;
 public class BaleenIT {
 
   @Test
-  public  void test() throws IncompleteException {
+  public void test() throws IncompleteException {
 
     ItemCollector collector = new ItemCollector();
 
@@ -33,18 +33,17 @@ public class BaleenIT {
     settings.setWatching(false);
 
     Pipeline pipeline = new SimplePipelineBuilder()
-      .withItemFactory(new TestItemFactory())
-      .addSource(new FileSystemSource(), settings)
-      .addProcessor(new BaleenCollectionReader())
-      .addProcessor(new TextBlockToContent())
-      .addProcessor(new BaleenAnnotators(), new BaleenAnnotatorSettings())
-      .addProcessor(collector)
-      .build();
+        .withItemFactory(new TestItemFactory())
+        .addSource(new FileSystemSource(), settings)
+        .addProcessor(new BaleenCollectionReader())
+        .addProcessor(new TextBlockToContent())
+        .addProcessor(new BaleenAnnotators(), new BaleenAnnotatorSettings())
+        .addProcessor(collector)
+        .build();
 
     pipeline.run();
 
     List<Item> items = collector.getItems();
-
 
     assertThat(items).hasSize(1);
 
@@ -52,7 +51,8 @@ public class BaleenIT {
 
     Text text = item.getContents(Text.class).findFirst().get();
 
-    assertThat(text.getAnnotations().getAll()).anyMatch(a -> a.getType().equals("baleen.entity.commsIdentifier"));
+    assertThat(text.getAnnotations().getAll())
+        .anyMatch(a -> a.getType().equals("baleen.entity.commsIdentifier"));
   }
 
 }

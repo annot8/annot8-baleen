@@ -17,7 +17,7 @@ public class JCasPopulator implements Consumer<JCas> {
   @Override
   public void accept(JCas jCas) {
 
-    populateDocumentAnnotation((DocumentAnnotation)jCas.getDocumentAnnotationFs());
+    populateDocumentAnnotation((DocumentAnnotation) jCas.getDocumentAnnotationFs());
 
     populateMetadata(jCas);
 
@@ -32,7 +32,7 @@ public class JCasPopulator implements Consumer<JCas> {
         .forEach(a -> {
           Metadata m = new Metadata(jCas);
           a.getProperties().getProperty("key", String.class)
-            .ifPresent(m::setKey);
+              .ifPresent(m::setKey);
           a.getProperties().getProperty("value", String.class)
               .ifPresent(m::setValue);
 

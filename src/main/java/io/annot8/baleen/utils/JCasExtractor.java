@@ -57,7 +57,10 @@ import uk.gov.dstl.baleen.types.structure.Structure;
 import uk.gov.dstl.baleen.uima.utils.UimaTypesUtils;
 
 public class JCasExtractor {
+
   private static final Logger LOGGER = LoggerFactory.getLogger(JCasExtractor.class);
+  private static final String ANNOTATION_ERROR = "Unable to create {} annotation";
+  private static final String GROUP_ERROR = "Unable to create {} group";
 
   private final JCas jCas;
   private final AnnotationStore annotations;
@@ -106,6 +109,7 @@ public class JCasExtractor {
     select(Dependency.class, this::addDependency);
 
   }
+
   private <T extends TOP> void select(Class<T> clazz, Consumer<T> consumer) {
     JCasUtil.select(jCas, clazz)
         .forEach(consumer);
@@ -119,8 +123,8 @@ public class JCasExtractor {
         .withProperty(Constants.BALEEN_ID, t.getExternalId())
         .withProperty(Constants.BALEEN_TYPE, t.getType().getName());
 
-    if(t instanceof Entity) {
-      Entity e = (Entity)t;
+    if (t instanceof Entity) {
+      Entity e = (Entity) t;
       builder
           .withProperty(Constants.BALEEN_VALUE, e.getValue());
     }
@@ -129,7 +133,7 @@ public class JCasExtractor {
   }
 
 
-  private  void addWordToken(WordToken t) {
+  private void addWordToken(WordToken t) {
     try {
       Annotation annotation = createAnnotation(t)
           .withProperty("pos", t.getPartOfSpeech())
@@ -138,30 +142,30 @@ public class JCasExtractor {
 
       baleenIdToWordToken.put(t.getExternalId(), annotation);
 
-    } catch(Annot8Exception e) {
-      LOGGER.error("Unable to annotate token", e);
+    } catch (Annot8Exception e) {
+      LOGGER.error(ANNOTATION_ERROR, WordToken.class.getSimpleName(), e);
 
     }
   }
 
-  private  void addSentence(Sentence t) {
+  private void addSentence(Sentence t) {
     try {
       createAnnotation(t)
           .save();
-    } catch(Annot8Exception e) {
-      LOGGER.error("Unable to annotate sentence", e);
+    } catch (Annot8Exception e) {
+      LOGGER.error(ANNOTATION_ERROR, Sentence.class.getSimpleName(), e);
 
     }
   }
 
-  private  void addPhraseChunk(PhraseChunk t) {
+  private void addPhraseChunk(PhraseChunk t) {
     try {
       createAnnotation(t)
           .withProperty("chunkType", t.getChunkType())
           // TODO: Other properties
           .save();
-    } catch(Annot8Exception e) {
-      LOGGER.error("Unable to annotate chunk", e);
+    } catch (Annot8Exception e) {
+      LOGGER.error(ANNOTATION_ERROR, PhraseChunk.class.getSimpleName(), e);
     }
   }
 
@@ -169,8 +173,8 @@ public class JCasExtractor {
     try {
       createAnnotation(t)
           .save();
-    } catch(Annot8Exception e) {
-      LOGGER.error("Unable to annotate paragraph", e);
+    } catch (Annot8Exception e) {
+      LOGGER.error(ANNOTATION_ERROR, Paragraph.class.getSimpleName(), e);
     }
   }
 
@@ -180,8 +184,8 @@ public class JCasExtractor {
           .withProperty("lemma", t.getLemmaForm())
           .withProperty("pos", t.getPartOfSpeech())
           .save();
-    } catch(Annot8Exception e) {
-      LOGGER.error("Unable to annotate lemma", e);
+    } catch (Annot8Exception e) {
+      LOGGER.error(ANNOTATION_ERROR, WordLemma.class.getSimpleName(), e);
     }
   }
 
@@ -193,8 +197,8 @@ public class JCasExtractor {
           .withAnnotation("governor", baleenIdToWordToken.get(t.getGovernor().getExternalId()))
           .withAnnotation("dependent", baleenIdToWordToken.get(t.getDependent().getExternalId()))
           .save();
-    } catch(Annot8Exception e) {
-      LOGGER.error("Unable to annotate dependency", e);
+    } catch (Annot8Exception e) {
+      LOGGER.error(GROUP_ERROR, Dependency.class.getSimpleName(), e);
     }
   }
 
@@ -206,8 +210,8 @@ public class JCasExtractor {
           .withProperty(Constants.STRUCTURAL_CLASS, m.getElementClass())
           // TODO: Some structural types have additional info (eg pageNumber, figure reference)
           .save();
-    } catch(Annot8Exception e) {
-      LOGGER.error("Unable to annotate structure", e);
+    } catch (Annot8Exception e) {
+      LOGGER.error(ANNOTATION_ERROR, Structure.class.getSimpleName(), e);
 
     }
   }
@@ -219,8 +223,8 @@ public class JCasExtractor {
           .withProperty("publishedIdType", m.getPublishedIdType())
           .withProperty("publishedId", m.getValue())
           .save();
-    } catch(Annot8Exception e) {
-      LOGGER.error("Unable to annotate published id", e);
+    } catch (Annot8Exception e) {
+      LOGGER.error(ANNOTATION_ERROR, PublishedId.class.getSimpleName(), e);
     }
   }
 
@@ -232,8 +236,8 @@ public class JCasExtractor {
           .withProperty("releasability", UimaTypesUtils.toList(m.getReleasability()))
           .withProperty("classification", m.getClassification())
           .save();
-    } catch(Annot8Exception e) {
-      LOGGER.error("Unable to annotate protective marking", e);
+    } catch (Annot8Exception e) {
+      LOGGER.error(ANNOTATION_ERROR, ProtectiveMarking.class.getSimpleName(), e);
     }
   }
 
@@ -245,8 +249,8 @@ public class JCasExtractor {
           .withProperty(Constants.METADATA_VALUE, m.getValue())
           .withBounds(NoBounds.getInstance())
           .save();
-    } catch(Annot8Exception e) {
-      LOGGER.error("Unable to annotate metadata", e);
+    } catch (Annot8Exception e) {
+      LOGGER.error(ANNOTATION_ERROR, Metadata.class.getSimpleName(), e);
     }
   }
 
@@ -254,8 +258,9 @@ public class JCasExtractor {
     try {
       createAnnotation(block)
           .save();
-    } catch(Annot8Exception e) {
-      LOGGER.error("Unable to annotate text block", e);
+    } catch (Annot8Exception e) {
+      LOGGER
+          .error(ANNOTATION_ERROR, uk.gov.dstl.baleen.types.language.Text.class.getSimpleName(), e);
     }
   }
 
@@ -271,7 +276,7 @@ public class JCasExtractor {
 
       builder.save();
     } catch (IncompleteException e) {
-      LOGGER.error("Unable to create annotation from entity",  e);
+      LOGGER.error(GROUP_ERROR, ReferenceTarget.class.getSimpleName(), e);
     }
   }
 
@@ -292,7 +297,7 @@ public class JCasExtractor {
 
       builder.save();
     } catch (IncompleteException e) {
-      LOGGER.error("Unable to create annotation from entity",  e);
+      LOGGER.error(GROUP_ERROR, Relation.class.getSimpleName(), e);
     }
   }
 
@@ -302,85 +307,77 @@ public class JCasExtractor {
 
       Builder builder = createAnnotation(entity);
 
-      if(entity instanceof Person) {
-        Person e = (Person)entity;
+      if (entity instanceof Person) {
+        Person e = (Person) entity;
 
         builder
             .withProperty("gender", e.getGender())
             .withProperty("title", e.getTitle());
 
-      } else if(entity instanceof Location) {
-        Location e = (Location)entity;
+      } else if (entity instanceof Location) {
+        Location e = (Location) entity;
         builder
             .withProperty("geoJson", e.getGeoJson());
 
-      } else if(entity instanceof Organisation) {
-        Organisation e = (Organisation)entity;
+      } else if (entity instanceof Organisation) {
         // No props
-      } else if(entity instanceof Vehicle) {
-        Vehicle e = (Vehicle)entity;
+      } else if (entity instanceof Vehicle) {
+        Vehicle e = (Vehicle) entity;
         builder
             .withProperty("vehicleId", e.getVehicleIdentifier());
-      } else if(entity instanceof Temporal) {
-        Temporal e = (Temporal)entity;
+      } else if (entity instanceof Temporal) {
+        Temporal e = (Temporal) entity;
         builder
             .withProperty("precision", e.getPrecision())
             .withProperty("scope", e.getScope())
             .withProperty("temporalType", e.getTemporalType())
             .withProperty("temporalStart", e.getTimestampStart())
             .withProperty("temporalEnd", e.getTimestampStop());
-      }  else if(entity instanceof Buzzword) {
-        Buzzword e = (Buzzword)entity;
+      } else if (entity instanceof Buzzword) {
+        Buzzword e = (Buzzword) entity;
         builder
             .withProperty("tags", UimaTypesUtils.toList(e.getTags()));
-      }  else if(entity instanceof Chemical) {
-        Chemical e = (Chemical)entity;
+      } else if (entity instanceof Chemical) {
         // No props
-      }  else if(entity instanceof CommsIdentifier) {
-        CommsIdentifier e = (CommsIdentifier)entity;
+      } else if (entity instanceof CommsIdentifier) {
         // No props
-      }  else if(entity instanceof DocumentReference) {
-        DocumentReference e = (DocumentReference)entity;
+      } else if (entity instanceof DocumentReference) {
         // No props
-      }  else if(entity instanceof Frequency) {
-        Frequency e = (Frequency)entity;
+      } else if (entity instanceof Frequency) {
         // No props
-      }  else if(entity instanceof MilitaryPlatform) {
-        MilitaryPlatform e = (MilitaryPlatform)entity;
+      } else if (entity instanceof MilitaryPlatform) {
         // No props
-      }  else if(entity instanceof Money) {
-        Money e = (Money)entity;
+      } else if (entity instanceof Money) {
+        Money e = (Money) entity;
         builder
             .withProperty("amount", e.getAmount())
             .withProperty("currency", e.getCurrency());
-      }  else if(entity instanceof Nationality) {
-        Nationality e = (Nationality)entity;
+      } else if (entity instanceof Nationality) {
+        Nationality e = (Nationality) entity;
         builder
             .withProperty("countryCode", e.getCountryCode());
-      }  else if(entity instanceof Quantity) {
-        Quantity e = (Quantity)entity;
+      } else if (entity instanceof Quantity) {
+        Quantity e = (Quantity) entity;
         builder
             .withProperty("normalizedQuantity", e.getNormalizedQuantity())
             .withProperty("normalizedUnit", e.getNormalizedUnit())
             .withProperty("quantity", e.getQuantity())
             .withProperty("unit", e.getUnit());
-      }  else if(entity instanceof Url) {
-        Url e = (Url)entity;
+      } else if (entity instanceof Url) {
         // No props
-      }  else if(entity instanceof Weapon) {
-        Weapon e = (Weapon)entity;
+      } else if (entity instanceof Weapon) {
         // No props
       }
 
       Annotation annotation = builder.save();
 
-      if(entity.getReferent() != null) {
+      if (entity.getReferent() != null) {
         referentAnnotations.put(entity.getReferent().getExternalId(), annotation);
       }
       baleenIdToAnnotation.put(entity.getExternalId(), annotation);
 
     } catch (IncompleteException e) {
-      LOGGER.error("Unable to create annotation from entity",  e);
+      LOGGER.error(ANNOTATION_ERROR, e.getClass().getSimpleName(), e);
     }
   }
 }

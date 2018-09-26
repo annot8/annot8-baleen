@@ -16,7 +16,8 @@ import uk.gov.dstl.baleen.uima.utils.UimaTypesUtils;
 
 public class BaleenCollectionReaderConsumer implements Consumer<JCas> {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(BaleenCollectionReaderConsumer.class);
+  private static final Logger LOGGER = LoggerFactory
+      .getLogger(BaleenCollectionReaderConsumer.class);
 
   private final Item item;
   private final String contentName;
@@ -40,28 +41,27 @@ public class BaleenCollectionReaderConsumer implements Consumer<JCas> {
 
       AnnotationStore annotations = text.getAnnotations();
 
-
       JCasExtractor extractor = new JCasExtractor(jCas, annotations, item.getGroups());
       extractor.extract();
 
-    } catch(Annot8Exception e) {
+    } catch (Annot8Exception e) {
       LOGGER.error("Can't process collectionreader output");
     }
 
   }
 
 
-
   private void addDocumentAnnotations(JCas jCas, Builder builder) {
 
     // Add document annotations
 
-    DocumentAnnotation da = (DocumentAnnotation)jCas.getDocumentAnnotationFs();
+    DocumentAnnotation da = (DocumentAnnotation) jCas.getDocumentAnnotationFs();
 
     builder.withProperty(Constants.DA_TYPE, da.getDocType());
     builder.withProperty(Constants.DA_CLASSIFICATION, da.getDocumentClassification());
     builder.withProperty(Constants.DA_CAVEATS, UimaTypesUtils.toList(da.getDocumentCaveats()));
-    builder.withProperty(Constants.DA_RELEASABILITY, UimaTypesUtils.toList(da.getDocumentReleasability()));
+    builder.withProperty(Constants.DA_RELEASABILITY,
+        UimaTypesUtils.toList(da.getDocumentReleasability()));
     builder.withProperty(Constants.DA_HASH, da.getHash());
     builder.withProperty(Constants.DA_LANGUAGE, da.getLanguage());
     builder.withProperty(Constants.DA_SOURCE, da.getSourceUri());

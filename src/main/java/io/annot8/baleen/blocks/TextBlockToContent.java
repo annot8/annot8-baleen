@@ -16,11 +16,11 @@ public class TextBlockToContent extends AbstractComponent implements Processor {
 
 
   @Override
-  public ProcessorResponse process(Item item) throws Annot8Exception {
-   item.getContents(Text.class)
-       .forEach(t -> process(item, t));
+  public ProcessorResponse process(Item item) {
+    item.getContents(Text.class)
+        .forEach(t -> process(item, t));
 
-   return ProcessorResponse.ok();
+    return ProcessorResponse.ok();
   }
 
   private void process(Item item, Text text) {
@@ -34,14 +34,14 @@ public class TextBlockToContent extends AbstractComponent implements Processor {
     Optional<SpanBounds> blockBounds = block.getBounds(SpanBounds.class);
 
     // Cant do anything without bounds.
-    if(!blockBounds.isPresent()) {
+    if (!blockBounds.isPresent()) {
       return;
     }
 
     Optional<String> dataInBlock = text.getText(block);
 
     // Cant do anything is we have no data
-    if(!dataInBlock.isPresent()) {
+    if (!dataInBlock.isPresent()) {
       return;
     }
 
@@ -61,7 +61,7 @@ public class TextBlockToContent extends AbstractComponent implements Processor {
       // Now delete the block, we'll process the subText from on
       text.getAnnotations().delete(block);
 
-    } catch(Annot8Exception e) {
+    } catch (Annot8Exception e) {
       log().error("Unable to annotate the block", e);
     }
 
@@ -77,8 +77,8 @@ public class TextBlockToContent extends AbstractComponent implements Processor {
           // Adjust the bounds
           SpanBounds boundsInSource = a.getBounds(SpanBounds.class).get();
           SpanBounds boundsInTarget = new SpanBounds(
-            Math.max(0, boundsInSource.getBegin() - targetBounds.getBegin()),
-            Math.min(targetBounds.getLength(), boundsInSource.getEnd() - targetBounds.getBegin())
+              Math.max(0, boundsInSource.getBegin() - targetBounds.getBegin()),
+              Math.min(targetBounds.getLength(), boundsInSource.getEnd() - targetBounds.getBegin())
           );
 
           // Add the annotation to the target content
@@ -86,7 +86,7 @@ public class TextBlockToContent extends AbstractComponent implements Processor {
             targetAnnotations.copy(a)
                 .withBounds(boundsInTarget)
                 .save();
-          } catch(Annot8Exception e) {
+          } catch (Annot8Exception e) {
             log().error("Unable to copy annotation", e);
           }
         });

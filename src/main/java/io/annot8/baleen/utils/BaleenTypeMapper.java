@@ -16,25 +16,25 @@ public class BaleenTypeMapper {
 
   public Optional<String> fromBaleenToAnnot8(TOP annotation) {
 
-    if(annotation == null) {
+    if (annotation == null) {
       return Optional.empty();
     }
 
-    String annot8 = null;
+    String annot8;
 
     String name = toCamelCase(annotation.getType().getShortName());
 
-    if(annotation instanceof Structure) {
+    if (annotation instanceof Structure) {
       annot8 = Constants.TYPE_STRUCTURAL_PREFIX + name;
-    } else if(annotation instanceof WordToken) {
+    } else if (annotation instanceof WordToken) {
       annot8 = Constants.TYPE_WORD_TOKEN;
-    } else if(annotation instanceof WordLemma) {
+    } else if (annotation instanceof WordLemma) {
       annot8 = Constants.TYPE_LEMMA;
-    } else if(annotation instanceof PhraseChunk) {
+    } else if (annotation instanceof PhraseChunk) {
       annot8 = Constants.TYPE_PHRASE_CHUNK;
-    } else if(annotation instanceof Text) {
+    } else if (annotation instanceof Text) {
       annot8 = Constants.TYPE_LANGUAGE_TEXT;
-    } else if(annotation instanceof Entity) {
+    } else if (annotation instanceof Entity) {
       annot8 = Constants.TYPE_ENTITY_PREFIX + name;
     } else {
       annot8 = Constants.PREFIX + name;
@@ -43,7 +43,6 @@ public class BaleenTypeMapper {
     return Optional.ofNullable(annot8);
 
   }
-
 
 
 }
