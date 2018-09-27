@@ -1,6 +1,65 @@
 
+# TODO: Create a java docker image which does all the java stuff and pushes github statuses
+# https://github.com/drone/drone/issues/1509
+
+
 pipeline:
-  build:
+  authenticate:
+    image: robertstettner/drone-mvn-auth
+    servers:
+      - id: releases
+        username: admin
+        password: R31e4sE
+      - id: snapshots
+        username: snap
+        password: crackle123
+    profiles:
+      - id: my-profile
+        repositories:
+          - id: releases
+            name: Repository for releases
+            url: http://remote.example.com
+            layout: default
+          - id: snapshots
+            name: Repository for snapahots
+            url: http://local.example.com
+            layout: default
+
+  build-and-test:
     image: maven:3-jdk-10
     commands:
       - mvn -B clean verify
+
+  analysis:
+    image: aosapps/drone-sonar-plugin
+    secrets: [sonar_host, sonar_token]
+
+  integration-tests:
+    image: maven:3-jdk-10
+    commands:
+      - mvn -B integration-test
+    when:
+      branch: [master, develop]
+      
+  deploy-snapshot:
+    image: maven:3-jdk-10
+    commands:
+      - mvn deploy -p snapshots
+    when:
+      branch: develop
+
+  deploy-release:
+    image: maven:3-jdk-10
+    commands:
+      - mvn deploy -p release
+    when:
+      event: deployment
+      branch: master
+  
+  slack:
+    image: plugins/slack
+    webhook: <slack_webhook>
+    channel: website
+    secrets: [ slack_webhook ]
+    when:
+      status: [ success, failure ]
