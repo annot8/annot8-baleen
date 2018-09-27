@@ -13,7 +13,7 @@ import io.annot8.components.files.sources.FileSystemSource;
 import io.annot8.components.files.sources.FileSystemSourceSettings;
 import io.annot8.core.data.Item;
 import io.annot8.core.exceptions.IncompleteException;
-import io.annot8.testing.testimpl.TestItemFactory;
+import io.annot8.testing.testimpl.TestItemCreator;
 import io.annot8.testing.testimpl.components.ItemCollector;
 import java.io.File;
 import java.util.List;
@@ -33,7 +33,7 @@ public class BaleenIT {
     settings.setWatching(false);
 
     Pipeline pipeline = new SimplePipelineBuilder()
-        .withItemFactory(new TestItemFactory())
+        .withItemCreator(new TestItemCreator())
         .addSource(new FileSystemSource(), settings)
         .addProcessor(new BaleenCollectionReader())
         .addProcessor(new TextBlockToContent())
