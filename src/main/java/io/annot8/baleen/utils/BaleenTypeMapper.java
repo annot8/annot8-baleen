@@ -3,6 +3,8 @@ package io.annot8.baleen.utils;
 import static uk.gov.dstl.baleen.consumers.utils.ConsumerUtils.toCamelCase;
 
 import io.annot8.baleen.Constants;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import org.apache.uima.jcas.cas.TOP;
 import uk.gov.dstl.baleen.types.language.PhraseChunk;
@@ -19,6 +21,9 @@ public class BaleenTypeMapper {
     if (annotation == null) {
       return Optional.empty();
     }
+
+    // TODO Should type this
+    List list = new ArrayList();
 
     String annot8;
 
