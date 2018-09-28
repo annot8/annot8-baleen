@@ -1,31 +1,28 @@
 language: java
 sudo: false
 install: true
-
 addons:
- sonarcloud:
-   organization: "annot8"
-   token:
-     secure: "TQDEKpzZhlyQzafPRcvZtAVcOjRCD/Y82iAlTH8gQnMz0WMVHErpybLtfNQXDT0BWSW8zeClI/+GdwIb0kxD9UfdCTYe+iG908vdS3/q7E/aYOnVbpocdAqHFSiSeujleMib5KuQg+DlZQ/STbcir4Xmp04wBUinwfufjYvUwE2L8jcnHOXoV4kOR20ulYYqIgWp9oW/KLslKQmbKLFe1UNxc+RDWXsLtNPtZqu+DJPDICl2C1Fv5feKmheNxWLvaygaYef1+9HmXwwz8sD7e2kNSe3BmjS+J36OTyeihNRrx3po/pft07o17ApruBAZeUgZodSc6fWkpe+5B7FW0XCKFJDIwqgdqRg8HJuSqQzoM1ajknRBCRyuLY9RryV9UP5j6d8oW2aaariyveeBi7UcIAn7TKC3mBYovth7JdyIGsZSsKjsX7un+dFNY5SogMaPw2isiIgTuu5ORIzZCu2I7fQ4GwEl7OmitgO7tOs0tyHKabFSkrICtIdkeM8IZhmfV2lZrzP/5xWkj/nNehK5TO5jUePPzW6RwdMFHHOWsJmVFx5zR2zj9xTctPtJdnsGmoZ1tbv2BDibviPTgoBB/YyC6MeFf1S/o3HDKpXnUxY5YLU0PyzEOye/pZ+ArLYnvDOB7of3I85CiYzmbD9u30z2qTxBuF5HhCdU2UM="
-
+  sonarcloud:
+    organization: annot8
+    token:
+      secure: TQDEKpzZhlyQzafPRcvZtAVcOjRCD/Y82iAlTH8gQnMz0WMVHErpybLtfNQXDT0BWSW8zeClI/+GdwIb0kxD9UfdCTYe+iG908vdS3/q7E/aYOnVbpocdAqHFSiSeujleMib5KuQg+DlZQ/STbcir4Xmp04wBUinwfufjYvUwE2L8jcnHOXoV4kOR20ulYYqIgWp9oW/KLslKQmbKLFe1UNxc+RDWXsLtNPtZqu+DJPDICl2C1Fv5feKmheNxWLvaygaYef1+9HmXwwz8sD7e2kNSe3BmjS+J36OTyeihNRrx3po/pft07o17ApruBAZeUgZodSc6fWkpe+5B7FW0XCKFJDIwqgdqRg8HJuSqQzoM1ajknRBCRyuLY9RryV9UP5j6d8oW2aaariyveeBi7UcIAn7TKC3mBYovth7JdyIGsZSsKjsX7un+dFNY5SogMaPw2isiIgTuu5ORIzZCu2I7fQ4GwEl7OmitgO7tOs0tyHKabFSkrICtIdkeM8IZhmfV2lZrzP/5xWkj/nNehK5TO5jUePPzW6RwdMFHHOWsJmVFx5zR2zj9xTctPtJdnsGmoZ1tbv2BDibviPTgoBB/YyC6MeFf1S/o3HDKpXnUxY5YLU0PyzEOye/pZ+ArLYnvDOB7of3I85CiYzmbD9u30z2qTxBuF5HhCdU2UM=
 jdk:
-  - openjdk10
-
+- openjdk10
 script:
-  # JaCoCo is used to have code coverage, the agent has to be activated
-  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package -P travis
+- mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package -P travis
 after_success:
-  - mvn jacoco:report coveralls:report -P travis
-  - mvn sonar:sonar -P travis
-
+- mvn jacoco:report coveralls:report -P travis
+- mvn sonar:sonar -P travis
 cache:
   directories:
-    - '$HOME/.m2/repository'
-    - '$HOME/.sonar/cache'
-
+  - "$HOME/.m2/repository"
+  - "$HOME/.sonar/cache"
 deploy:
   provider: script
-  script: "mvn -s .travis.settings.xml deploy -P travis -DskipTests"
+  script: mvn -s .travis.settings.xml deploy -P travis -DskipTests
   skip_cleanup: true
   on:
     branch: master
+notifications:
+  slack:
+    secure: Av48QWnWrhUe3xtDyq/NhOxjDTt1TLitxWS+mkgXTJhPUQH6Wql1WQxeDQT8+w8swUR8sucEyMYWeX3z9hbT0rL/apNDytS1TvjOxHgwZUlpHiBNtggZSZXrDHypdib8U67bpId4gunNOM1fKMWgdmtgtJg8x3NAByb2Pir7a9ounC0NUS4iJ9pc3lhWkCsBDTk8hDyhnN83o3O47TiDcupYHzVNiNvGzXx95UkNazgUtf6PJjps3DHD1FLKlsqr7PhSRMXSBT8WHYij5jsSBw2E4orqtC667vFqaXcp55M/8sHaWNcPZGYvj8Cv2sgkAq4LINlmei97nOtQ9tDsa6cbpbtiOiBO0gpAHP63K8qiWy5uSZE1SQrs9n3yQo49DoprW8Td+u71UwXBZ4wRjR9ELVuKEs8/hSBFoYltvm27a4yVgiF+He1KaywxzZbwZZ8r2azJFV0zBboz14BCktbYpLsrl1N/TJfgQeT2onohc43M7HHQBe1LrHgn9LvwDH2uFxQPEqwNlGb9iV5pI1fHtiU8yhovFDoFNvze/2shLo+4DrY4dtjb6xIKFndivygkJDMm0i39XRPGKCJun7W5fSZOVQaAmolNWtlBiIuNACoQqNTHo2oQLUsPWQqau5xRLuKxGWYMvJi+/hvXcM9Po/zKh/CIlJXzGAlq2+A=
