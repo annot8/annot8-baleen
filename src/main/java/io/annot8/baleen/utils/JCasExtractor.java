@@ -165,7 +165,7 @@ public class JCasExtractor {
       // TODO: Unclear what to do with head word etc
 
       if(t.getHeadWord() != null ) {
-        builder.withoutProperty("headWord", t.getHeadWord().getCoveredText());
+        builder.withProperty("headWord", t.getHeadWord().getCoveredText());
       }
 
       builder.save();
