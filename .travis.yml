@@ -25,7 +25,7 @@ cache:
 
 deploy:
   provider: script
-  script: "mvn -s .travis.settings.xml deploy -P travis"
+  script: "mvn -s .travis.settings.xml deploy -P travis -DskipTests"
   skip_cleanup: true
   on:
     branch: master
