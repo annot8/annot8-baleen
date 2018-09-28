@@ -160,10 +160,15 @@ public class JCasExtractor {
 
   private void addPhraseChunk(PhraseChunk t) {
     try {
-      createAnnotation(t)
-          .withProperty("chunkType", t.getChunkType())
-          // TODO: Other properties
-          .save();
+      Builder builder = createAnnotation(t)
+          .withProperty("chunkType", t.getChunkType());
+      // TODO: Unclear what to do with head word etc
+
+      if(t.getHeadWord() != null ) {
+        builder.withProperty("headWord", t.getHeadWord().getCoveredText());
+      }
+
+      builder.save();
     } catch (Annot8Exception e) {
       LOGGER.error(ANNOTATION_ERROR, PhraseChunk.class.getSimpleName(), e);
     }
