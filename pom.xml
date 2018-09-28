@@ -86,5 +86,44 @@
         </dependencies>
       </plugin>
     </plugins>
+    <!-- Requires for Package Cloud -->
+    <extensions>
+      <extension>
+        <groupId>io.packagecloud.maven.wagon</groupId>
+        <artifactId>maven-packagecloud-wagon</artifactId>
+        <version>0.0.4</version>
+      </extension>
+    </extensions>
   </build>
+
+  <profiles>
+    <profile>
+      <id>travis</id>
+      <repositories>
+        <repository>
+          <id>packagecloud-annot8</id>
+          <url>
+            packagecloud+https://packagecloud.io/committed/annot8/maven2
+          </url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+          <snapshots>
+            <enabled>true</enabled>
+          </snapshots>
+        </repository>
+      </repositories>
+      <distributionManagement>
+          <repository>
+            <id>packagecloud-annot8</id>
+            <url>packagecloud+https://packagecloud.io/committed/annot8</url>
+          </repository>
+          <snapshotRepository>
+            <id>packagecloud-annot8</id>
+            <url>packagecloud+https://packagecloud.io/committed/annot8</url>
+          </snapshotRepository>
+      </distributionManagement>
+    </profile>
+
+  </profiles>
 </project>

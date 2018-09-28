@@ -22,3 +22,10 @@ cache:
   directories:
     - '$HOME/.m2/repository'
     - '$HOME/.sonar/cache'
+
+deploy:
+  provider: script
+  script: "mvn -s .travis.settings.xml deploy -P travis"
+  skip_cleanup: true
+  on:
+    branch: master
