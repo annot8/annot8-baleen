@@ -90,7 +90,8 @@
           <id>packagecloud-annot8</id>
           <url>https://packagecloud.io/committed/annot8/maven2</url>
           <releases>
-            <enabled>true</enabled>
+            <!-- Don't look for releases, use Central -->
+            <enabled>false</enabled>
           </releases>
           <snapshots>
             <enabled>true</enabled>
@@ -103,11 +104,11 @@
           in central and local releases. Therefore prefer not to deploy releases.
           -->
           <!--<repository>-->
-            <!--<id>packagecloud-annot8</id>-->
+            <!--<id>packagecloud-annot8-releases</id>-->
             <!--<url>packagecloud+https://packagecloud.io/committed/annot8</url>-->
           <!--</repository>-->
           <snapshotRepository>
-            <id>packagecloud-annot8</id>
+            <id>packagecloud-annot8-snapshots</id>
             <url>packagecloud+https://packagecloud.io/committed/annot8</url>
           </snapshotRepository>
       </distributionManagement>
