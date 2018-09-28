@@ -12,7 +12,7 @@ You can use this in two ways:
 * Use `TextBlocksToContent` to create individual Annot8 text content for each annotation TextBlock.
 * Use `BaleenAnnotators` to process Annot8 Text content through a Baleen annotators pipeline (providing your own YAML).
 
-See the BaleenIT integration test for an example pipeline.
+See the `Annot8BaleenTest` test for an example pipeline.
 
 
 

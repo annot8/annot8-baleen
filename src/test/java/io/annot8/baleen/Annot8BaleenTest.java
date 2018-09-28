@@ -17,9 +17,9 @@ import io.annot8.testing.testimpl.TestItemCreator;
 import io.annot8.testing.testimpl.components.ItemCollector;
 import java.io.File;
 import java.util.List;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class BaleenIT {
+public class Annot8BaleenTest {
 
   @Test
   public void test() throws IncompleteException {
