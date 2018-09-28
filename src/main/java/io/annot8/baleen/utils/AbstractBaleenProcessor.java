@@ -87,7 +87,7 @@ public abstract class AbstractBaleenProcessor extends AbstractComponent implemen
   }
 
   private String getSource(Content<?> content) {
-    // TODO: We don't have the same notion of source as Baleen... so we just make sure we have
+    // We don't have the same notion of source as Baleen... so we just make sure we have
     // something non-null
 
     return content.getProperties().getOrDefault(PROPERTY_KEY_SOURCE, DEFAULT_SOURCE);
