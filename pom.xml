@@ -99,14 +99,10 @@
         </repository>
       </repositories>
       <distributionManagement>
-          <!-- In theory you can deploy to releases, but if it already exists
-          you will error. Either way you might end up with different versions
-          in central and local releases. Therefore prefer not to deploy releases.
-          -->
-          <!--<repository>-->
-            <!--<id>packagecloud-annot8-releases</id>-->
-            <!--<url>packagecloud+https://packagecloud.io/committed/annot8</url>-->
-          <!--</repository>-->
+          <repository>
+            <id>packagecloud-annot8-releases</id>
+            <url>packagecloud+https://packagecloud.io/committed/annot8-releases</url>
+          </repository>
           <snapshotRepository>
             <id>packagecloud-annot8-snapshots</id>
             <url>packagecloud+https://packagecloud.io/committed/annot8</url>
