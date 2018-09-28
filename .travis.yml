@@ -9,7 +9,7 @@ addons:
      secure: "TQDEKpzZhlyQzafPRcvZtAVcOjRCD/Y82iAlTH8gQnMz0WMVHErpybLtfNQXDT0BWSW8zeClI/+GdwIb0kxD9UfdCTYe+iG908vdS3/q7E/aYOnVbpocdAqHFSiSeujleMib5KuQg+DlZQ/STbcir4Xmp04wBUinwfufjYvUwE2L8jcnHOXoV4kOR20ulYYqIgWp9oW/KLslKQmbKLFe1UNxc+RDWXsLtNPtZqu+DJPDICl2C1Fv5feKmheNxWLvaygaYef1+9HmXwwz8sD7e2kNSe3BmjS+J36OTyeihNRrx3po/pft07o17ApruBAZeUgZodSc6fWkpe+5B7FW0XCKFJDIwqgdqRg8HJuSqQzoM1ajknRBCRyuLY9RryV9UP5j6d8oW2aaariyveeBi7UcIAn7TKC3mBYovth7JdyIGsZSsKjsX7un+dFNY5SogMaPw2isiIgTuu5ORIzZCu2I7fQ4GwEl7OmitgO7tOs0tyHKabFSkrICtIdkeM8IZhmfV2lZrzP/5xWkj/nNehK5TO5jUePPzW6RwdMFHHOWsJmVFx5zR2zj9xTctPtJdnsGmoZ1tbv2BDibviPTgoBB/YyC6MeFf1S/o3HDKpXnUxY5YLU0PyzEOye/pZ+ArLYnvDOB7of3I85CiYzmbD9u30z2qTxBuF5HhCdU2UM="
 
 jdk:
-  - openjdk11
+  - openjdk10
 
 script:
   # JaCoCo is used to have code coverage, the agent has to be activated
