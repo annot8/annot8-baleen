@@ -1,16 +1,20 @@
+/* Annot8 (annot8.io) - Licensed under Apache-2.0. */
 package io.annot8.baleen.utils;
 
 import static uk.gov.dstl.baleen.consumers.utils.ConsumerUtils.toCamelCase;
 
-import io.annot8.baleen.Constants;
 import java.util.Optional;
+
 import org.apache.uima.jcas.cas.TOP;
+
 import uk.gov.dstl.baleen.types.language.PhraseChunk;
 import uk.gov.dstl.baleen.types.language.Text;
 import uk.gov.dstl.baleen.types.language.WordLemma;
 import uk.gov.dstl.baleen.types.language.WordToken;
 import uk.gov.dstl.baleen.types.semantic.Entity;
 import uk.gov.dstl.baleen.types.structure.Structure;
+
+import io.annot8.baleen.Constants;
 
 public class BaleenTypeMapper {
 
@@ -41,8 +45,5 @@ public class BaleenTypeMapper {
     }
 
     return Optional.ofNullable(annot8);
-
   }
-
-
 }

@@ -1,10 +1,13 @@
+/* Annot8 (annot8.io) - Licensed under Apache-2.0. */
 package io.annot8.baleen.annotators;
+
+import java.util.function.Consumer;
+
+import org.apache.uima.jcas.JCas;
 
 import io.annot8.baleen.utils.JCasExtractor;
 import io.annot8.common.data.content.Text;
 import io.annot8.core.data.Item;
-import java.util.function.Consumer;
-import org.apache.uima.jcas.JCas;
 
 public class BaleenAnnotatorConsumer implements Consumer<JCas> {
 
@@ -20,6 +23,4 @@ public class BaleenAnnotatorConsumer implements Consumer<JCas> {
     JCasExtractor extractor = new JCasExtractor(jCas, text.getAnnotations(), item.getGroups());
     extractor.extract();
   }
-
-
 }

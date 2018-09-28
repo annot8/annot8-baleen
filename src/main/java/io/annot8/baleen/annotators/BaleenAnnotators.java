@@ -1,4 +1,13 @@
+/* Annot8 (annot8.io) - Licensed under Apache-2.0. */
 package io.annot8.baleen.annotators;
+
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Optional;
+
+import org.apache.commons.io.IOUtils;
+
+import uk.gov.dstl.baleen.exceptions.BaleenException;
 
 import io.annot8.baleen.utils.AbstractBaleenProcessor;
 import io.annot8.baleen.utils.JCasPopulator;
@@ -6,15 +15,9 @@ import io.annot8.common.data.content.Text;
 import io.annot8.core.context.Context;
 import io.annot8.core.data.Item;
 import io.annot8.core.settings.SettingsClass;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.Optional;
-import org.apache.commons.io.IOUtils;
-import uk.gov.dstl.baleen.exceptions.BaleenException;
 
 @SettingsClass(BaleenAnnotatorSettings.class)
 public class BaleenAnnotators extends AbstractBaleenProcessor {
-
 
   @Override
   protected String getYaml(Context context) {
@@ -23,16 +26,15 @@ public class BaleenAnnotators extends AbstractBaleenProcessor {
   }
 
   public void processItem(Item item) {
-    item.getContents(Text.class)
-        .forEach(t -> processText(item, t));
+    item.getContents(Text.class).forEach(t -> processText(item, t));
   }
 
   private void processText(Item item, Text text) {
     InputStream content = IOUtils.toInputStream(text.getData(), StandardCharsets.UTF_8);
 
     try {
-      processWithBaleen(text, content, new JCasPopulator(text),
-          new BaleenAnnotatorConsumer(item, text));
+      processWithBaleen(
+          text, content, new JCasPopulator(text), new BaleenAnnotatorConsumer(item, text));
     } catch (BaleenException e) {
       log().error("Baleen unable to process text", e);
     }
