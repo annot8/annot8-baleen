@@ -17,7 +17,6 @@
   </properties>
 
   <dependencies>
-
     <dependency>
       <groupId>io.annot8</groupId>
       <artifactId>annot8-core</artifactId>
@@ -68,19 +67,7 @@
       <artifactId>assertj-core</artifactId>
       <scope>test</scope>
     </dependency>
-
   </dependencies>
-
-  <build>
-    <!-- Requires for PackageCloud in the travis profile only-->
-    <extensions>
-      <extension>
-        <groupId>io.packagecloud.maven.wagon</groupId>
-        <artifactId>maven-packagecloud-wagon</artifactId>
-        <version>0.0.6</version>
-      </extension>
-    </extensions>
-  </build>
 
   <profiles>
     <profile>
@@ -98,32 +85,7 @@
           </snapshots>
         </repository>
       </repositories>
-      <distributionManagement>
-          <repository>
-            <id>packagecloud-annot8-releases</id>
-            <url>packagecloud+https://packagecloud.io/committed/annot8-releases</url>
-          </repository>
-          <snapshotRepository>
-            <id>packagecloud-annot8-snapshots</id>
-            <url>packagecloud+https://packagecloud.io/committed/annot8</url>
-          </snapshotRepository>
-      </distributionManagement>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.eluder.coveralls</groupId>
-            <artifactId>coveralls-maven-plugin</artifactId>
-            <version>4.3.0</version>
-            <dependencies>
-              <dependency>
-                <groupId>javax.xml.bind</groupId>
-                <artifactId>jaxb-api</artifactId>
-                <version>2.2.3</version>
-              </dependency>
-            </dependencies>
-          </plugin>
-        </plugins>
-      </build>
     </profile>
   </profiles>
+
 </project>
