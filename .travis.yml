@@ -13,6 +13,7 @@ script:
 after_success:
 - mvn jacoco:report coveralls:report -P travis
 - mvn sonar:sonar -P travis
+- mvn spotless:check
 cache:
   directories:
   - "$HOME/.m2/repository"
