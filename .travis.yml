@@ -2,11 +2,11 @@ language: java
 sudo: false
 install: true
 
-#addons:
-#  sonarcloud:
-#    organization: "sonarcloud"
-#    token:
-#      secure: "jCe1bGGbx0kwEDy9PDcXBlX5YAkjbEX2moL93L8U+UwkmDRbilsSQQYKQtzgUJ4drUU8g0BJywndUBcR0DSF1dW9YjPGgazCrCbiSimXy3IFMwLI5kU2BnJXTHzcQDJDxWr4P5UttL1KsXi72dRTmeTa9XvXckTCkggAPsprTTA/aurYBuh5C8JbK3WKLwctEmC8RcYLg92cK9H09493h+Txk/jmRoS9wisXwPEbJu5+XspUOgBfrfGYMhKs+cJfaIJs7nRdb7nu65opb+SfgiFurYpKKQ1VJuJp9VAHlQ3Uu6XxItDq4Q0wSHI9an5QjzFuQNxsBORTvB6R99PZlgcAtV6jWRRUhn7QKh+7ibviBcKBCwUw+1j57cxIPXEu5CaG9KyCZQSzLpFCx7zk2mKsPatnHc8ucaDCxBRJnkT9ZfVg5V8ac4wqwqfzmoiNUpHQZ1V0pWHdH9iPChMW1+cYmCmxOMDscE5vx4E4aTKySFgfsZQRwDhMm1zm7WPiUNPy2rez5GAhNLKIGhBV3+6DFYdaitrNDet68uvthaRbrzOrhJ8WUAvW2qCnqPJ3FUecOoJCrTxpthIBjsA9EXFaly70DeINdTY6TM5Jyv8OzLTG3xYPlL6OgFoFPKG90pQLVvAgI4pSccERFOqcf57wuxymQWy2aHLjLMyeX+s="
+addons:
+ sonarcloud:
+   organization: "annot8"
+   token:
+     secure: "TQDEKpzZhlyQzafPRcvZtAVcOjRCD/Y82iAlTH8gQnMz0WMVHErpybLtfNQXDT0BWSW8zeClI/+GdwIb0kxD9UfdCTYe+iG908vdS3/q7E/aYOnVbpocdAqHFSiSeujleMib5KuQg+DlZQ/STbcir4Xmp04wBUinwfufjYvUwE2L8jcnHOXoV4kOR20ulYYqIgWp9oW/KLslKQmbKLFe1UNxc+RDWXsLtNPtZqu+DJPDICl2C1Fv5feKmheNxWLvaygaYef1+9HmXwwz8sD7e2kNSe3BmjS+J36OTyeihNRrx3po/pft07o17ApruBAZeUgZodSc6fWkpe+5B7FW0XCKFJDIwqgdqRg8HJuSqQzoM1ajknRBCRyuLY9RryV9UP5j6d8oW2aaariyveeBi7UcIAn7TKC3mBYovth7JdyIGsZSsKjsX7un+dFNY5SogMaPw2isiIgTuu5ORIzZCu2I7fQ4GwEl7OmitgO7tOs0tyHKabFSkrICtIdkeM8IZhmfV2lZrzP/5xWkj/nNehK5TO5jUePPzW6RwdMFHHOWsJmVFx5zR2zj9xTctPtJdnsGmoZ1tbv2BDibviPTgoBB/YyC6MeFf1S/o3HDKpXnUxY5YLU0PyzEOye/pZ+ArLYnvDOB7of3I85CiYzmbD9u30z2qTxBuF5HhCdU2UM="
 
 jdk:
   - openjdk11
@@ -15,18 +15,10 @@ script:
   # JaCoCo is used to have code coverage, the agent has to be activated
   - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package
 after_success:
-  - mvn integration-test
   - mvn jacoco:report coveralls:report
-#  - mvn sonar:sonar
+  - mvn sonar:sonar
 
 cache:
   directories:
     - '$HOME/.m2/repository'
     - '$HOME/.sonar/cache'
-
-# Don't copy the following part if you're using this project as a starting point of yours
-#notifications:
-#  email: false
-#  webhooks:
-#    - secure: "YnouVsvmF9gDFMT9s8MQsHe5ARaO78SvNeU+MzGKB+l7we7Xge5Zmi6J1KOuOW7zoKkb/wCnUvs+wu9qr4K0VgmWb2wBOpO2c5p85GrSYjPKGwfeZHSmGUpHUoNeDNa32StbTn7oOqtisTbcCWAM3fCPK/HW2l6Mh6eLSsqrlXwCYek2NWWfNeWX0tw22ctMGX6c2I200mGtU3SxPLvzg6MC9AbJ5/VnMkr0tzJnJdQWFGP6Iv6kNBb982tijbdBiriUX6964IPC4XSboK/KFRoHEfxaQuB8rcc64ar4Yr0UIB7Cz2DY4hKi6XaC5RT0O10rfFbCf6UInpzsz2CC4ZMU2Tpnpew/Y7VxhDBXLdq3pkvZS8UXj9J5ivaTJeCIidfoxw7NF8ctPtgIvUI5SoC1V7bjMPTvTTFz7vqtvCUZbAecQgM88MKGyYPD2g4HxzGL7vCGfPSOCMsxySemBkBElqPvDRVLrDNNPJNEkUZ/yQxaFCZpITPD787MyKjeI9NlkG3htZ+i8t2BYmQj28JzoADY+wsdufK8WlkWANISfFyEzyo+JlOoXGX/gfHWpWhaWn3klIDm8LED3FM4/wNRT6yg8BZ1BEQ6D6RSG5SrhYwJPRr6bFzh7MA3+mkO7GW5SVZNVX2Q0qmigmKd6cJBGD3/V0r74LtwRH+sKxI="
-#  on_start: always
