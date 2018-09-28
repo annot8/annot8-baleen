@@ -1,6 +1,12 @@
+/* Annot8 (annot8.io) - Licensed under Apache-2.0. */
 package io.annot8.baleen;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
+import java.io.File;
+import java.util.List;
+
+import org.junit.jupiter.api.Test;
 
 import io.annot8.baleen.annotators.BaleenAnnotatorSettings;
 import io.annot8.baleen.annotators.BaleenAnnotators;
@@ -15,9 +21,6 @@ import io.annot8.core.data.Item;
 import io.annot8.core.exceptions.IncompleteException;
 import io.annot8.testing.testimpl.TestItemCreator;
 import io.annot8.testing.testimpl.components.ItemCollector;
-import java.io.File;
-import java.util.List;
-import org.junit.jupiter.api.Test;
 
 public class Annot8BaleenTest {
 
@@ -28,18 +31,18 @@ public class Annot8BaleenTest {
 
     SimplePipelineBuilder spb = new SimplePipelineBuilder();
 
-    FileSystemSourceSettings settings = new FileSystemSourceSettings(
-        new File("./data").toPath());
+    FileSystemSourceSettings settings = new FileSystemSourceSettings(new File("./data").toPath());
     settings.setWatching(false);
 
-    Pipeline pipeline = new SimplePipelineBuilder()
-        .withItemCreator(new TestItemCreator())
-        .addSource(new FileSystemSource(), settings)
-        .addProcessor(new BaleenCollectionReader())
-        .addProcessor(new TextBlockToContent())
-        .addProcessor(new BaleenAnnotators(), new BaleenAnnotatorSettings())
-        .addProcessor(collector)
-        .build();
+    Pipeline pipeline =
+        new SimplePipelineBuilder()
+            .withItemCreator(new TestItemCreator())
+            .addSource(new FileSystemSource(), settings)
+            .addProcessor(new BaleenCollectionReader())
+            .addProcessor(new TextBlockToContent())
+            .addProcessor(new BaleenAnnotators(), new BaleenAnnotatorSettings())
+            .addProcessor(collector)
+            .build();
 
     pipeline.run();
 
@@ -54,5 +57,4 @@ public class Annot8BaleenTest {
     assertThat(text.getAnnotations().getAll())
         .anyMatch(a -> a.getType().equals("baleen.entity.commsIdentifier"));
   }
-
 }
