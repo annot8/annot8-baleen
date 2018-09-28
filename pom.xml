@@ -77,7 +77,7 @@
       <extension>
         <groupId>io.packagecloud.maven.wagon</groupId>
         <artifactId>maven-packagecloud-wagon</artifactId>
-        <version>0.0.4</version>
+        <version>0.0.6</version>
       </extension>
     </extensions>
   </build>
@@ -98,10 +98,14 @@
         </repository>
       </repositories>
       <distributionManagement>
-          <repository>
-            <id>packagecloud-annot8</id>
-            <url>packagecloud+https://packagecloud.io/committed/annot8</url>
-          </repository>
+          <!-- In theory you can deploy to releases, but if it already exists
+          you will error. Either way you might end up with different versions
+          in central and local releases. Therefore prefer not to deploy releases.
+          -->
+          <!--<repository>-->
+            <!--<id>packagecloud-annot8</id>-->
+            <!--<url>packagecloud+https://packagecloud.io/committed/annot8</url>-->
+          <!--</repository>-->
           <snapshotRepository>
             <id>packagecloud-annot8</id>
             <url>packagecloud+https://packagecloud.io/committed/annot8</url>
