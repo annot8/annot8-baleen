@@ -3,28 +3,26 @@ package io.annot8.baleen;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.annot8.common.implementations.pipelines.runnable.RunnablePipeline;
-import io.annot8.common.implementations.pipelines.runnable.RunnablePipelineBuilder;
-import io.annot8.common.implementations.pipelines.runnable.SimpleRunnablePipelineBuilder;
-import io.annot8.core.exceptions.BadConfigurationException;
-import io.annot8.core.exceptions.MissingResourceException;
-import io.annot8.testing.testimpl.TestContext;
-import java.io.File;
-import java.util.List;
-
-import org.junit.jupiter.api.Test;
-
 import io.annot8.baleen.annotators.BaleenAnnotatorSettings;
 import io.annot8.baleen.annotators.BaleenAnnotators;
 import io.annot8.baleen.blocks.TextBlockToContent;
 import io.annot8.baleen.reader.BaleenCollectionReader;
 import io.annot8.common.data.content.Text;
-import io.annot8.common.implementations.pipelines.Pipeline;
+import io.annot8.common.pipelines.elements.Pipeline;
+import io.annot8.common.pipelines.elements.PipelineBuilder;
+import io.annot8.common.pipelines.pipeline.SimplePipelineBuilder;
+import io.annot8.common.pipelines.simple.SimplePipeBuilder;
 import io.annot8.components.files.sources.FileSystemSource;
 import io.annot8.components.files.sources.FileSystemSourceSettings;
 import io.annot8.core.data.Item;
+import io.annot8.core.exceptions.BadConfigurationException;
 import io.annot8.core.exceptions.IncompleteException;
+import io.annot8.core.exceptions.MissingResourceException;
+import io.annot8.testing.testimpl.TestContext;
 import io.annot8.testing.testimpl.components.ItemCollector;
+import java.io.File;
+import java.util.List;
+import org.junit.jupiter.api.Test;
 
 public class Annot8BaleenTest {
 
@@ -33,18 +31,23 @@ public class Annot8BaleenTest {
 
     ItemCollector collector = new ItemCollector();
 
-    RunnablePipelineBuilder spb = new SimpleRunnablePipelineBuilder();
+    PipelineBuilder spb = new SimplePipelineBuilder();
 
     FileSystemSourceSettings settings = new FileSystemSourceSettings(new File("./data").toPath());
     settings.setWatching(false);
 
-    RunnablePipeline pipeline =
+
+
+    Pipeline pipeline =
         spb
             .addSource(new FileSystemSource(), settings)
-            .addProcessor(new BaleenCollectionReader())
-            .addProcessor(new TextBlockToContent())
-            .addProcessor(new BaleenAnnotators(), new BaleenAnnotatorSettings())
-            .addProcessor(collector)
+            .addPipe(
+                new SimplePipeBuilder()
+                  .addProcessor(new BaleenCollectionReader())
+                  .addProcessor(new TextBlockToContent())
+                  .addProcessor(new BaleenAnnotators(), new BaleenAnnotatorSettings())
+                  .addProcessor(collector)
+            )
             .build();
 
 
