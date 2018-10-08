@@ -10,14 +10,16 @@ import io.annot8.baleen.reader.BaleenCollectionReader;
 import io.annot8.common.data.content.Text;
 import io.annot8.common.pipelines.elements.Pipeline;
 import io.annot8.common.pipelines.elements.PipelineBuilder;
-import io.annot8.common.pipelines.pipeline.SimplePipelineBuilder;
+import io.annot8.common.pipelines.queues.MemoryItemQueue;
 import io.annot8.common.pipelines.simple.SimplePipeBuilder;
+import io.annot8.common.pipelines.simple.SimplePipelineBuilder;
 import io.annot8.components.files.sources.FileSystemSource;
 import io.annot8.components.files.sources.FileSystemSourceSettings;
 import io.annot8.core.data.Item;
 import io.annot8.core.exceptions.BadConfigurationException;
 import io.annot8.core.exceptions.IncompleteException;
 import io.annot8.core.exceptions.MissingResourceException;
+import io.annot8.testing.testimpl.TestBaseItemFactory;
 import io.annot8.testing.testimpl.TestContext;
 import io.annot8.testing.testimpl.components.ItemCollector;
 import java.io.File;
@@ -47,7 +49,10 @@ public class Annot8BaleenTest {
                   .addProcessor(new TextBlockToContent())
                   .addProcessor(new BaleenAnnotators(), new BaleenAnnotatorSettings())
                   .addProcessor(collector)
+
             )
+            .withItemFactory(new TestBaseItemFactory())
+            .withQueue(new MemoryItemQueue())
             .build();
 
 
