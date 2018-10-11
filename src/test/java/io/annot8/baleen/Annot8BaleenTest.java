@@ -3,6 +3,11 @@ package io.annot8.baleen;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.io.File;
+import java.util.List;
+
+import org.junit.jupiter.api.Test;
+
 import io.annot8.baleen.annotators.BaleenAnnotatorSettings;
 import io.annot8.baleen.annotators.BaleenAnnotators;
 import io.annot8.baleen.blocks.TextBlockToContent;
@@ -22,14 +27,12 @@ import io.annot8.core.exceptions.MissingResourceException;
 import io.annot8.testing.testimpl.TestBaseItemFactory;
 import io.annot8.testing.testimpl.TestContext;
 import io.annot8.testing.testimpl.components.ItemCollector;
-import java.io.File;
-import java.util.List;
-import org.junit.jupiter.api.Test;
 
 public class Annot8BaleenTest {
 
   @Test
-  public void test() throws IncompleteException, BadConfigurationException, MissingResourceException {
+  public void test()
+      throws IncompleteException, BadConfigurationException, MissingResourceException {
 
     ItemCollector collector = new ItemCollector();
 
@@ -38,23 +41,17 @@ public class Annot8BaleenTest {
     FileSystemSourceSettings settings = new FileSystemSourceSettings(new File("./data").toPath());
     settings.setWatching(false);
 
-
-
     Pipeline pipeline =
-        spb
-            .addSource(new FileSystemSource(), settings)
+        spb.addSource(new FileSystemSource(), settings)
             .addPipe(
                 new SimplePipeBuilder()
-                  .addProcessor(new BaleenCollectionReader())
-                  .addProcessor(new TextBlockToContent())
-                  .addProcessor(new BaleenAnnotators(), new BaleenAnnotatorSettings())
-                  .addProcessor(collector)
-
-            )
+                    .addProcessor(new BaleenCollectionReader())
+                    .addProcessor(new TextBlockToContent())
+                    .addProcessor(new BaleenAnnotators(), new BaleenAnnotatorSettings())
+                    .addProcessor(collector))
             .withItemFactory(new TestBaseItemFactory())
             .withQueue(new MemoryItemQueue())
             .build();
-
 
     pipeline.configure(new TestContext());
     pipeline.run();
