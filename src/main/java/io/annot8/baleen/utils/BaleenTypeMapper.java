@@ -41,7 +41,7 @@ public class BaleenTypeMapper {
     } else if (annotation instanceof Entity) {
       annot8 = Constants.TYPE_ENTITY_PREFIX + name;
     } else {
-      annot8 = Constants.PREFIX + name;
+      annot8 = name;
     }
 
     return Optional.ofNullable(annot8);

@@ -17,6 +17,6 @@ class BaleenTypeMapperTest {
     BaleenTypeMapper mapper = new BaleenTypeMapper();
     JCas jCas = JCasSingleton.getJCasInstance();
     Person p = new Person(jCas);
-    assertThat(mapper.fromBaleenToAnnot8(p).get()).isEqualTo("baleen.entity.person");
+    assertThat(mapper.fromBaleenToAnnot8(p).get()).isEqualTo("entity.person");
   }
 }

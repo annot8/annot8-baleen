@@ -3,7 +3,6 @@ package io.annot8.baleen.utils;
 
 import static io.annot8.baleen.Constants.BALEEN_ID;
 import static io.annot8.baleen.Constants.BALEEN_VALUE;
-import static io.annot8.baleen.Constants.PREFIX;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -122,7 +121,7 @@ public class JCasExtractor {
     Builder builder =
         annotations
             .create()
-            .withType(typeMapper.fromBaleenToAnnot8(t).orElse(Constants.PREFIX + ".unknown"))
+            .withType(typeMapper.fromBaleenToAnnot8(t).orElse("unknown"))
             .withBounds(new SpanBounds(t.getBegin(), t.getEnd()))
             .withProperty(Constants.BALEEN_ID, t.getExternalId())
             .withProperty(Constants.BALEEN_TYPE, t.getType().getName());
@@ -248,7 +247,7 @@ public class JCasExtractor {
     try {
       annotations
           .create()
-          .withType(typeMapper.fromBaleenToAnnot8(m).orElse(PREFIX + "metadata"))
+          .withType(typeMapper.fromBaleenToAnnot8(m).orElse("metadata"))
           .withProperty(Constants.METADATA_KEY, m.getKey())
           .withProperty(Constants.METADATA_VALUE, m.getValue())
           .withBounds(NoBounds.getInstance())
