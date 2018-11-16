@@ -34,7 +34,7 @@ public final class Constants {
   public static final String DA_TIMESTAMP = DA_PREFIX + "timestamp";
   private static final String METADATA_PREFIX = "metadata.";
   public static final String METADATA_KEY = METADATA_PREFIX + "key";
-  public static final String METADATA_VALUE = METADATA_PREFIX + "value";
+  public static final String METADATA_VALUE = METADATA_PREFIX + BALEEN_VALUE;
   private static final String BLOCK_PREFIX = "block.";
   public static final String BLOCK_BEGIN = BLOCK_PREFIX + "begin";
   public static final String BLOCK_END = BLOCK_PREFIX + "end";
