@@ -2,6 +2,7 @@
 package io.annot8.baleen.blocks;
 
 import java.util.Optional;
+
 import io.annot8.baleen.Constants;
 import io.annot8.common.data.bounds.SpanBounds;
 import io.annot8.common.data.content.Text;
