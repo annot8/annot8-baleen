@@ -37,7 +37,6 @@ public class BaleenCollectionReaderConsumer implements Consumer<JCas> {
     try {
       Text.Builder<Text, String> builder =
           item.create(Text.class).withName(contentName).withData(jCas.getDocumentText());
-
       addDocumentAnnotations(jCas, builder);
 
       Text text = builder.save();
@@ -48,7 +47,7 @@ public class BaleenCollectionReaderConsumer implements Consumer<JCas> {
       extractor.extract();
 
     } catch (Annot8Exception e) {
-      LOGGER.error("Can't process collectionreader output");
+      LOGGER.error("Can't process collection reader output");
     }
   }
 

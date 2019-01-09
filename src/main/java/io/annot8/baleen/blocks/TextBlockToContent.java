@@ -2,7 +2,6 @@
 package io.annot8.baleen.blocks;
 
 import java.util.Optional;
-
 import io.annot8.baleen.Constants;
 import io.annot8.common.data.bounds.SpanBounds;
 import io.annot8.common.data.content.Text;
@@ -86,11 +85,7 @@ public class TextBlockToContent extends AbstractComponent implements Processor {
                           boundsInSource.getEnd() - targetBounds.getBegin()));
 
               // Add the annotation to the target content
-              try {
-                targetAnnotations.copy(a).withBounds(boundsInTarget).save();
-              } catch (Annot8Exception e) {
-                log().error("Unable to copy annotation", e);
-              }
+              targetAnnotations.copy(a).withBounds(boundsInTarget).save();
             });
   }
 
