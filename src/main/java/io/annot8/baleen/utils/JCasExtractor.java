@@ -117,7 +117,6 @@ public class JCasExtractor {
   }
 
   private Annotation.Builder createAnnotation(BaleenAnnotation t) {
-
     Builder builder =
         annotations
             .create()
@@ -135,160 +134,105 @@ public class JCasExtractor {
   }
 
   private void addWordToken(WordToken t) {
-    try {
-      Annotation annotation =
-          createAnnotation(t)
-              .withProperty("pos", t.getPartOfSpeech())
-              .withProperty("sentenceOrder", t.getSentenceOrder())
-              .save();
+    Annotation annotation =
+        createAnnotation(t)
+            .withProperty("pos", t.getPartOfSpeech())
+            .withProperty("sentenceOrder", t.getSentenceOrder())
+            .save();
 
-      baleenIdToWordToken.put(t.getExternalId(), annotation);
-
-    } catch (Annot8Exception e) {
-      LOGGER.error(ANNOTATION_ERROR, WordToken.class.getSimpleName(), e);
-    }
+    baleenIdToWordToken.put(t.getExternalId(), annotation);
   }
 
   private void addSentence(Sentence t) {
-    try {
-      createAnnotation(t).save();
-    } catch (Annot8Exception e) {
-      LOGGER.error(ANNOTATION_ERROR, Sentence.class.getSimpleName(), e);
-    }
+    createAnnotation(t).save();
   }
 
   private void addPhraseChunk(PhraseChunk t) {
-    try {
-      Builder builder = createAnnotation(t).withProperty("chunkType", t.getChunkType());
-      // TODO: Unclear what to do with head word etc
+    Builder builder = createAnnotation(t).withProperty("chunkType", t.getChunkType());
+    // TODO: Unclear what to do with head word etc
 
-      if (t.getHeadWord() != null) {
-        builder.withProperty("headWord", t.getHeadWord().getCoveredText());
-      }
-
-      builder.save();
-    } catch (Annot8Exception e) {
-      LOGGER.error(ANNOTATION_ERROR, PhraseChunk.class.getSimpleName(), e);
+    if (t.getHeadWord() != null) {
+      builder.withProperty("headWord", t.getHeadWord().getCoveredText());
     }
+
+    builder.save();
   }
 
   private void addParagraph(Paragraph t) {
-    try {
       createAnnotation(t).save();
-    } catch (Annot8Exception e) {
-      LOGGER.error(ANNOTATION_ERROR, Paragraph.class.getSimpleName(), e);
-    }
   }
 
   private void addWordLemma(WordLemma t) {
-    try {
-      createAnnotation(t)
-          .withProperty("lemma", t.getLemmaForm())
-          .withProperty("pos", t.getPartOfSpeech())
-          .save();
-    } catch (Annot8Exception e) {
-      LOGGER.error(ANNOTATION_ERROR, WordLemma.class.getSimpleName(), e);
-    }
+    createAnnotation(t)
+        .withProperty("lemma", t.getLemmaForm())
+        .withProperty("pos", t.getPartOfSpeech())
+        .save();
   }
 
   private void addDependency(Dependency t) {
-    try {
-      groups
-          .create()
-          .withType(Constants.GROUP_DEPENDENCY)
-          .withProperty("dependencyType", t.getDependencyType())
-          .withAnnotation("governor", baleenIdToWordToken.get(t.getGovernor().getExternalId()))
-          .withAnnotation("dependent", baleenIdToWordToken.get(t.getDependent().getExternalId()))
-          .save();
-    } catch (Annot8Exception e) {
-      LOGGER.error(GROUP_ERROR, Dependency.class.getSimpleName(), e);
-    }
+    groups
+      .create()
+      .withType(Constants.GROUP_DEPENDENCY)
+      .withProperty("dependencyType", t.getDependencyType())
+      .withAnnotation("governor", baleenIdToWordToken.get(t.getGovernor().getExternalId()))
+      .withAnnotation("dependent", baleenIdToWordToken.get(t.getDependent().getExternalId()))
+      .save();
   }
 
   private void addStructure(Structure m) {
-    try {
-      createAnnotation(m)
-          .withProperty(Constants.STRUCTURAL_DEPTH, m.getDepth())
-          .withProperty(Constants.STRUCTURAL_ID, m.getElementId())
-          .withProperty(Constants.STRUCTURAL_CLASS, m.getElementClass())
-          // TODO: Some structural types have additional info (eg pageNumber, figure reference)
-          .save();
-    } catch (Annot8Exception e) {
-      LOGGER.error(ANNOTATION_ERROR, Structure.class.getSimpleName(), e);
-    }
+    createAnnotation(m)
+      .withProperty(Constants.STRUCTURAL_DEPTH, m.getDepth())
+      .withProperty(Constants.STRUCTURAL_ID, m.getElementId())
+      .withProperty(Constants.STRUCTURAL_CLASS, m.getElementClass())
+      // TODO: Some structural types have additional info (eg pageNumber, figure reference)
+      .save();
   }
 
   private void addPublishedId(PublishedId m) {
-
-    try {
-      createAnnotation(m)
-          .withProperty("publishedIdType", m.getPublishedIdType())
-          .withProperty("publishedId", m.getValue())
-          .save();
-    } catch (Annot8Exception e) {
-      LOGGER.error(ANNOTATION_ERROR, PublishedId.class.getSimpleName(), e);
-    }
+    createAnnotation(m)
+        .withProperty("publishedIdType", m.getPublishedIdType())
+        .withProperty("publishedId", m.getValue())
+        .save();
   }
 
   private void addProtectiveMarking(ProtectiveMarking m) {
-
-    try {
-      createAnnotation(m)
-          .withProperty("caveats", UimaTypesUtils.toList(m.getCaveats()))
-          .withProperty("releasability", UimaTypesUtils.toList(m.getReleasability()))
-          .withProperty("classification", m.getClassification())
-          .save();
-    } catch (Annot8Exception e) {
-      LOGGER.error(ANNOTATION_ERROR, ProtectiveMarking.class.getSimpleName(), e);
-    }
+    createAnnotation(m)
+        .withProperty("caveats", UimaTypesUtils.toList(m.getCaveats()))
+        .withProperty("releasability", UimaTypesUtils.toList(m.getReleasability()))
+        .withProperty("classification", m.getClassification())
+        .save();
   }
 
   private void addMetadata(Metadata m) {
-    try {
-      annotations
-          .create()
-          .withType(typeMapper.fromBaleenToAnnot8(m).orElse("metadata"))
-          .withProperty(Constants.METADATA_KEY, m.getKey())
-          .withProperty(Constants.METADATA_VALUE, m.getValue())
-          .withBounds(NoBounds.getInstance())
-          .save();
-    } catch (Annot8Exception e) {
-      LOGGER.error(ANNOTATION_ERROR, Metadata.class.getSimpleName(), e);
-    }
+    annotations
+        .create()
+        .withType(typeMapper.fromBaleenToAnnot8(m).orElse("metadata"))
+        .withProperty(Constants.METADATA_KEY, m.getKey())
+        .withProperty(Constants.METADATA_VALUE, m.getValue())
+        .withBounds(NoBounds.getInstance())
+        .save();
   }
 
   private void addTextBlock(uk.gov.dstl.baleen.types.language.Text block) {
-    try {
-      createAnnotation(block).save();
-    } catch (Annot8Exception e) {
-      LOGGER.error(
-          ANNOTATION_ERROR, uk.gov.dstl.baleen.types.language.Text.class.getSimpleName(), e);
-    }
+    createAnnotation(block).save();
   }
 
   private void addCoreferences(ReferenceTarget rt) {
-    try {
+    Group.Builder builder =
+        groups
+            .create()
+            .withType(Constants.GROUP_COREFERENCE)
+            .withProperty(BALEEN_ID, rt.getExternalId());
 
-      Group.Builder builder =
-          groups
-              .create()
-              .withType(Constants.GROUP_COREFERENCE)
-              .withProperty(BALEEN_ID, rt.getExternalId());
+    referentAnnotations
+        .get(rt.getExternalId())
+        .forEach(a -> builder.withAnnotation("mention", a));
 
-      referentAnnotations
-          .get(rt.getExternalId())
-          .forEach(a -> builder.withAnnotation("mention", a));
-
-      builder.save();
-    } catch (IncompleteException e) {
-      LOGGER.error(GROUP_ERROR, ReferenceTarget.class.getSimpleName(), e);
-    }
+    builder.save();
   }
 
   private void addRelations(Relation r) {
-    try {
-
-      Group.Builder builder =
+    Group.Builder builder =
           groups
               .create()
               .withType(Constants.GROUP_RELATION)
@@ -303,9 +247,6 @@ public class JCasExtractor {
               .withAnnotation("to", baleenIdToAnnotation.get(r.getTarget().getExternalId()));
 
       builder.save();
-    } catch (IncompleteException e) {
-      LOGGER.error(GROUP_ERROR, Relation.class.getSimpleName(), e);
-    }
   }
 
   private void addEntity(Entity entity) {
@@ -342,7 +283,7 @@ public class JCasExtractor {
       } else if (entity instanceof Chemical) {
         // No props
       } else if (entity instanceof CommsIdentifier) {
-        // No props
+        builder.withProperty("subType", entity.getSubType());
       } else if (entity instanceof DocumentReference) {
         // No props
       } else if (entity instanceof Frequency) {
