@@ -55,7 +55,6 @@ import io.annot8.common.data.bounds.SpanBounds;
 import io.annot8.core.annotations.Annotation;
 import io.annot8.core.annotations.Annotation.Builder;
 import io.annot8.core.annotations.Group;
-import io.annot8.core.exceptions.Annot8Exception;
 import io.annot8.core.exceptions.IncompleteException;
 import io.annot8.core.stores.AnnotationStore;
 import io.annot8.core.stores.GroupStore;
@@ -159,7 +158,7 @@ public class JCasExtractor {
   }
 
   private void addParagraph(Paragraph t) {
-      createAnnotation(t).save();
+    createAnnotation(t).save();
   }
 
   private void addWordLemma(WordLemma t) {
@@ -171,21 +170,21 @@ public class JCasExtractor {
 
   private void addDependency(Dependency t) {
     groups
-      .create()
-      .withType(Constants.GROUP_DEPENDENCY)
-      .withProperty("dependencyType", t.getDependencyType())
-      .withAnnotation("governor", baleenIdToWordToken.get(t.getGovernor().getExternalId()))
-      .withAnnotation("dependent", baleenIdToWordToken.get(t.getDependent().getExternalId()))
-      .save();
+        .create()
+        .withType(Constants.GROUP_DEPENDENCY)
+        .withProperty("dependencyType", t.getDependencyType())
+        .withAnnotation("governor", baleenIdToWordToken.get(t.getGovernor().getExternalId()))
+        .withAnnotation("dependent", baleenIdToWordToken.get(t.getDependent().getExternalId()))
+        .save();
   }
 
   private void addStructure(Structure m) {
     createAnnotation(m)
-      .withProperty(Constants.STRUCTURAL_DEPTH, m.getDepth())
-      .withProperty(Constants.STRUCTURAL_ID, m.getElementId())
-      .withProperty(Constants.STRUCTURAL_CLASS, m.getElementClass())
-      // TODO: Some structural types have additional info (eg pageNumber, figure reference)
-      .save();
+        .withProperty(Constants.STRUCTURAL_DEPTH, m.getDepth())
+        .withProperty(Constants.STRUCTURAL_ID, m.getElementId())
+        .withProperty(Constants.STRUCTURAL_CLASS, m.getElementClass())
+        // TODO: Some structural types have additional info (eg pageNumber, figure reference)
+        .save();
   }
 
   private void addPublishedId(PublishedId m) {
@@ -224,29 +223,27 @@ public class JCasExtractor {
             .withType(Constants.GROUP_COREFERENCE)
             .withProperty(BALEEN_ID, rt.getExternalId());
 
-    referentAnnotations
-        .get(rt.getExternalId())
-        .forEach(a -> builder.withAnnotation("mention", a));
+    referentAnnotations.get(rt.getExternalId()).forEach(a -> builder.withAnnotation("mention", a));
 
     builder.save();
   }
 
   private void addRelations(Relation r) {
     Group.Builder builder =
-          groups
-              .create()
-              .withType(Constants.GROUP_RELATION)
-              .withProperty(BALEEN_ID, r.getExternalId())
-              .withProperty(BALEEN_VALUE, r.getValue())
-              .withProperty("relationshipType", r.getRelationshipType())
-              .withProperty("relationshipSubtype", r.getRelationSubType())
-              .withProperty("sentenceDistance", r.getSentenceDistance())
-              .withProperty("dependencyDistance", r.getDependencyDistance())
-              .withProperty("wordDistance", r.getWordDistance())
-              .withAnnotation("from", baleenIdToAnnotation.get(r.getSource().getExternalId()))
-              .withAnnotation("to", baleenIdToAnnotation.get(r.getTarget().getExternalId()));
+        groups
+            .create()
+            .withType(Constants.GROUP_RELATION)
+            .withProperty(BALEEN_ID, r.getExternalId())
+            .withProperty(BALEEN_VALUE, r.getValue())
+            .withProperty("relationshipType", r.getRelationshipType())
+            .withProperty("relationshipSubtype", r.getRelationSubType())
+            .withProperty("sentenceDistance", r.getSentenceDistance())
+            .withProperty("dependencyDistance", r.getDependencyDistance())
+            .withProperty("wordDistance", r.getWordDistance())
+            .withAnnotation("from", baleenIdToAnnotation.get(r.getSource().getExternalId()))
+            .withAnnotation("to", baleenIdToAnnotation.get(r.getTarget().getExternalId()));
 
-      builder.save();
+    builder.save();
   }
 
   private void addEntity(Entity entity) {
