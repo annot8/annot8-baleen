@@ -30,7 +30,7 @@ public class BaleenTypeMapper {
     String name = toCamelCase(annotation.getType().getShortName());
 
     if (annotation instanceof Structure) {
-      annot8 = Constants.TYPE_STRUCTURAL_PREFIX + name;
+      annot8 = PathUtils.join(Constants.TYPE_STRUCTURAL_PREFIX, name);
     } else if (annotation instanceof WordToken) {
       annot8 = Constants.TYPE_WORD_TOKEN;
     } else if (annotation instanceof WordLemma) {
