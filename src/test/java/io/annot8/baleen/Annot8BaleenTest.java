@@ -65,6 +65,6 @@ public class Annot8BaleenTest {
     Text text = item.getContents(Text.class).findFirst().get();
 
     assertThat(text.getAnnotations().getAll())
-        .anyMatch(a -> a.getType().equals("entity.commsIdentifier"));
+        .anyMatch(a -> a.getType().equals("entity/commsIdentifier"));
   }
 }

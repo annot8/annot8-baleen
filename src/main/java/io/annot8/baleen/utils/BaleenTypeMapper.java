@@ -15,6 +15,7 @@ import uk.gov.dstl.baleen.types.semantic.Entity;
 import uk.gov.dstl.baleen.types.structure.Structure;
 
 import io.annot8.baleen.Constants;
+import io.annot8.conventions.PathUtils;
 
 public class BaleenTypeMapper {
 
@@ -39,7 +40,7 @@ public class BaleenTypeMapper {
     } else if (annotation instanceof Text) {
       annot8 = Constants.TYPE_LANGUAGE_TEXT;
     } else if (annotation instanceof Entity) {
-      annot8 = Constants.TYPE_ENTITY_PREFIX + name;
+      annot8 = PathUtils.join(Constants.TYPE_ENTITY_PREFIX, name);
     } else {
       annot8 = name;
     }
