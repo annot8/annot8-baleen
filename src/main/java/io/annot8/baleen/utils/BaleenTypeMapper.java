@@ -3,7 +3,6 @@ package io.annot8.baleen.utils;
 
 import static uk.gov.dstl.baleen.consumers.utils.ConsumerUtils.toCamelCase;
 
-import io.annot8.conventions.AnnotationTypes;
 import java.util.Optional;
 
 import org.apache.uima.jcas.cas.TOP;
@@ -34,6 +33,7 @@ import uk.gov.dstl.baleen.types.semantic.Temporal;
 import uk.gov.dstl.baleen.types.structure.Structure;
 
 import io.annot8.baleen.Constants;
+import io.annot8.conventions.AnnotationTypes;
 import io.annot8.conventions.PathUtils;
 
 public class BaleenTypeMapper {
@@ -59,7 +59,7 @@ public class BaleenTypeMapper {
     } else if (annotation instanceof Text) {
       annot8 = Constants.TYPE_LANGUAGE_TEXT;
     } else if (annotation instanceof Entity) {
-      annot8 = mapEntity((Entity)annotation);
+      annot8 = mapEntity((Entity) annotation);
     } else {
       annot8 = name;
     }
@@ -72,39 +72,57 @@ public class BaleenTypeMapper {
     String type = entity.getType().getShortName();
     String subType = entity.getSubType();
 
-    if(entity instanceof Buzzword) {
+    if (entity instanceof Buzzword) {
       // Could use tags here.. but you can have multiple tags
       type = AnnotationTypes.ANNOTATION_TYPE_CONCEPT;
-    } else if(entity instanceof Chemical) {
+    } else if (entity instanceof Chemical) {
       type = AnnotationTypes.ANNOTATION_TYPE_CHEMICAL;
-    } else if(entity instanceof CommsIdentifier) {
-      if(subType != null) {
+    } else if (entity instanceof CommsIdentifier) {
+      if (subType != null) {
         switch (subType) {
-          case "email": type = AnnotationTypes.ANNOTATION_TYPE_EMAIL; subType = null; break;
-          case "domain": type = AnnotationTypes.ANNOTATION_TYPE_DOMAIN; subType = null;break;
-          case "ipv4address": type = AnnotationTypes.ANNOTATION_TYPE_IPADDRESS; subType = null;break;
-          case "ipv6address": type = AnnotationTypes.ANNOTATION_TYPE_IPADDRESS; subType = null;break;
-          case "telephone": type = AnnotationTypes.ANNOTATION_TYPE_PHONENUMBER; subType = null;break;
-          case "username": type = AnnotationTypes.ANNOTATION_TYPE_USERNAME; subType = null;break;
+          case "email":
+            type = AnnotationTypes.ANNOTATION_TYPE_EMAIL;
+            subType = null;
+            break;
+          case "domain":
+            type = AnnotationTypes.ANNOTATION_TYPE_DOMAIN;
+            subType = null;
+            break;
+          case "ipv4address":
+            type = AnnotationTypes.ANNOTATION_TYPE_IPADDRESS;
+            subType = null;
+            break;
+          case "ipv6address":
+            type = AnnotationTypes.ANNOTATION_TYPE_IPADDRESS;
+            subType = null;
+            break;
+          case "telephone":
+            type = AnnotationTypes.ANNOTATION_TYPE_PHONENUMBER;
+            subType = null;
+            break;
+          case "username":
+            type = AnnotationTypes.ANNOTATION_TYPE_USERNAME;
+            subType = null;
+            break;
         }
       }
-    } else if(entity instanceof DocumentReference) {
+    } else if (entity instanceof DocumentReference) {
       type = AnnotationTypes.ANNOTATION_TYPE_REFERENCE;
-    } else if(entity instanceof Frequency) {
+    } else if (entity instanceof Frequency) {
       type = AnnotationTypes.ANNOTATION_TYPE_FREQUENCY;
-    } else if(entity instanceof Money) {
+    } else if (entity instanceof Money) {
       type = AnnotationTypes.ANNOTATION_TYPE_MONEY;
-    } else if(entity instanceof Nationality) {
+    } else if (entity instanceof Nationality) {
       type = AnnotationTypes.ANNOTATION_TYPE_NATIONALITY;
-    } else if(entity instanceof Organisation) {
+    } else if (entity instanceof Organisation) {
       type = AnnotationTypes.ANNOTATION_TYPE_GEOPOLITICALENTITY;
-    } else if(entity instanceof Person) {
+    } else if (entity instanceof Person) {
       type = AnnotationTypes.ANNOTATION_TYPE_PERSON;
-    } else if(entity instanceof Quantity) {
-      Quantity q = (Quantity)entity;
+    } else if (entity instanceof Quantity) {
+      Quantity q = (Quantity) entity;
       type = AnnotationTypes.ANNOTATION_TYPE_QUANTITY;
 
-      if(subType != null) {
+      if (subType != null) {
         switch (subType) {
           default:
           case "":
@@ -129,39 +147,37 @@ public class BaleenTypeMapper {
         }
       }
 
-    } else if(entity instanceof Url) {
+    } else if (entity instanceof Url) {
       type = AnnotationTypes.ANNOTATION_TYPE_URL;
-    } else if(entity instanceof Vehicle) {
+    } else if (entity instanceof Vehicle) {
       type = AnnotationTypes.ANNOTATION_TYPE_VEHICLE;
-    } else if(entity instanceof Vulnerability) {
+    } else if (entity instanceof Vulnerability) {
       type = AnnotationTypes.ANNOTATION_TYPE_VULNERABILITY;
-    } else if(entity instanceof Coordinate) {
+    } else if (entity instanceof Coordinate) {
       type = AnnotationTypes.ANNOTATION_TYPE_COORDINATE;
-    } else if(entity instanceof MilitaryPlatform) {
+    } else if (entity instanceof MilitaryPlatform) {
       type = AnnotationTypes.ANNOTATION_TYPE_VEHICLE;
-    }  else if(entity instanceof Weapon) {
+    } else if (entity instanceof Weapon) {
       type = AnnotationTypes.ANNOTATION_TYPE_WEAPON;
-    } else if(entity instanceof Location) {
+    } else if (entity instanceof Location) {
       type = AnnotationTypes.ANNOTATION_TYPE_LOCATION;
-    } else if(entity instanceof Temporal) {
+    } else if (entity instanceof Temporal) {
       type = AnnotationTypes.ANNOTATION_TYPE_TEMPORAL;
     } else {
       type = PathUtils.join(Constants.TYPE_ENTITY_PREFIX, type);
     }
 
-
     return PathUtils.join(sanitiseType(type), sanitiseType(subType));
-
   }
 
   private String sanitiseType(String type) {
-    if(type == null) {
+    if (type == null) {
       return null;
     }
 
     String trimmed = type.trim();
 
-    if(trimmed.isEmpty()) {
+    if (trimmed.isEmpty()) {
       return null;
     }
 
