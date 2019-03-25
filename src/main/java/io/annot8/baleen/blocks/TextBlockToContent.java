@@ -45,7 +45,6 @@ public class TextBlockToContent extends AbstractComponent implements Processor {
       return;
     }
 
-    try {
       SpanBounds bounds = blockBounds.get();
 
       Text subText =
@@ -61,10 +60,6 @@ public class TextBlockToContent extends AbstractComponent implements Processor {
 
       // Now delete the block, we'll process the subText from on
       text.getAnnotations().delete(block);
-
-    } catch (Annot8Exception e) {
-      log().error("Unable to annotate the block", e);
-    }
   }
 
   private void moveAnnotations(Text source, SpanBounds targetBounds, Text target) {
