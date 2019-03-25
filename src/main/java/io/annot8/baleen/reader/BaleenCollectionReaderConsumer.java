@@ -1,22 +1,18 @@
 /* Annot8 (annot8.io) - Licensed under Apache-2.0. */
 package io.annot8.baleen.reader;
 
-import java.util.function.Consumer;
-
-import org.apache.uima.jcas.JCas;
-import org.apache.uima.jcas.tcas.DocumentAnnotation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import uk.gov.dstl.baleen.uima.utils.UimaTypesUtils;
-
 import io.annot8.baleen.Constants;
 import io.annot8.baleen.utils.JCasExtractor;
 import io.annot8.common.data.content.Text;
 import io.annot8.core.data.Content.Builder;
 import io.annot8.core.data.Item;
-import io.annot8.core.exceptions.Annot8Exception;
 import io.annot8.core.stores.AnnotationStore;
+import java.util.function.Consumer;
+import org.apache.uima.jcas.JCas;
+import org.apache.uima.jcas.tcas.DocumentAnnotation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import uk.gov.dstl.baleen.uima.utils.UimaTypesUtils;
 
 public class BaleenCollectionReaderConsumer implements Consumer<JCas> {
 
@@ -33,8 +29,6 @@ public class BaleenCollectionReaderConsumer implements Consumer<JCas> {
 
   @Override
   public void accept(JCas jCas) {
-
-    try {
       Text.Builder<Text, String> builder =
           item.create(Text.class).withName(contentName).withData(jCas.getDocumentText());
       addDocumentAnnotations(jCas, builder);
@@ -45,10 +39,6 @@ public class BaleenCollectionReaderConsumer implements Consumer<JCas> {
 
       JCasExtractor extractor = new JCasExtractor(jCas, annotations, item.getGroups());
       extractor.extract();
-
-    } catch (Annot8Exception e) {
-      LOGGER.error("Can't process collection reader output");
-    }
   }
 
   private void addDocumentAnnotations(JCas jCas, Builder builder) {
