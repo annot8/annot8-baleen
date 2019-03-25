@@ -11,7 +11,6 @@ import io.annot8.core.annotations.Annotation;
 import io.annot8.core.components.Processor;
 import io.annot8.core.components.responses.ProcessorResponse;
 import io.annot8.core.data.Item;
-import io.annot8.core.exceptions.Annot8Exception;
 import io.annot8.core.stores.AnnotationStore;
 
 public class TextBlockToContent extends AbstractComponent implements Processor {
@@ -45,21 +44,21 @@ public class TextBlockToContent extends AbstractComponent implements Processor {
       return;
     }
 
-      SpanBounds bounds = blockBounds.get();
+    SpanBounds bounds = blockBounds.get();
 
-      Text subText =
-          item.create(Text.class)
-              .withName(makeContentName(text, bounds))
-              .withProperty(Constants.BLOCK_BEGIN, bounds.getBegin())
-              .withProperty(Constants.BLOCK_END, bounds.getEnd())
-              .withData(dataInBlock.get())
-              .save();
+    Text subText =
+        item.create(Text.class)
+            .withName(makeContentName(text, bounds))
+            .withProperty(Constants.BLOCK_BEGIN, bounds.getBegin())
+            .withProperty(Constants.BLOCK_END, bounds.getEnd())
+            .withData(dataInBlock.get())
+            .save();
 
-      // Move the annotations from the old block to this
-      moveAnnotations(text, bounds, subText);
+    // Move the annotations from the old block to this
+    moveAnnotations(text, bounds, subText);
 
-      // Now delete the block, we'll process the subText from on
-      text.getAnnotations().delete(block);
+    // Now delete the block, we'll process the subText from on
+    text.getAnnotations().delete(block);
   }
 
   private void moveAnnotations(Text source, SpanBounds targetBounds, Text target) {

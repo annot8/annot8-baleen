@@ -15,7 +15,6 @@ import io.annot8.baleen.utils.JCasExtractor;
 import io.annot8.common.data.content.Text;
 import io.annot8.core.data.Content.Builder;
 import io.annot8.core.data.Item;
-import io.annot8.core.exceptions.Annot8Exception;
 import io.annot8.core.stores.AnnotationStore;
 
 public class BaleenCollectionReaderConsumer implements Consumer<JCas> {
@@ -34,17 +33,16 @@ public class BaleenCollectionReaderConsumer implements Consumer<JCas> {
   @Override
   public void accept(JCas jCas) {
 
-    
-      Text.Builder<Text, String> builder =
-          item.create(Text.class).withName(contentName).withData(jCas.getDocumentText());
-      addDocumentAnnotations(jCas, builder);
+    Text.Builder<Text, String> builder =
+        item.create(Text.class).withName(contentName).withData(jCas.getDocumentText());
+    addDocumentAnnotations(jCas, builder);
 
-      Text text = builder.save();
+    Text text = builder.save();
 
-      AnnotationStore annotations = text.getAnnotations();
+    AnnotationStore annotations = text.getAnnotations();
 
-      JCasExtractor extractor = new JCasExtractor(jCas, annotations, item.getGroups());
-      extractor.extract();
+    JCasExtractor extractor = new JCasExtractor(jCas, annotations, item.getGroups());
+    extractor.extract();
   }
 
   private void addDocumentAnnotations(JCas jCas, Builder builder) {
