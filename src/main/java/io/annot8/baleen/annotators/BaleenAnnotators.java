@@ -1,16 +1,18 @@
 /* Annot8 (annot8.io) - Licensed under Apache-2.0. */
 package io.annot8.baleen.annotators;
 
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+
+import org.apache.commons.io.IOUtils;
+
+import uk.gov.dstl.baleen.exceptions.BaleenException;
+
 import io.annot8.api.data.Item;
 import io.annot8.baleen.utils.AbstractBaleenProcessor;
 import io.annot8.baleen.utils.BaleenSettings;
 import io.annot8.baleen.utils.JCasPopulator;
 import io.annot8.common.data.content.Text;
-import org.apache.commons.io.IOUtils;
-import uk.gov.dstl.baleen.exceptions.BaleenException;
-
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 
 public class BaleenAnnotators extends AbstractBaleenProcessor {
 

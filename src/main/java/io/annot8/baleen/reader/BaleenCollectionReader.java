@@ -1,15 +1,16 @@
 /* Annot8 (annot8.io) - Licensed under Apache-2.0. */
 package io.annot8.baleen.reader;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+import uk.gov.dstl.baleen.exceptions.BaleenException;
+
 import io.annot8.api.data.Item;
 import io.annot8.baleen.utils.AbstractBaleenProcessor;
 import io.annot8.baleen.utils.BaleenSettings;
 import io.annot8.common.data.content.FileContent;
-import uk.gov.dstl.baleen.exceptions.BaleenException;
-
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 
 public class BaleenCollectionReader extends AbstractBaleenProcessor {
 

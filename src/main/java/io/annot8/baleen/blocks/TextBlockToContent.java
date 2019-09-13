@@ -1,6 +1,8 @@
 /* Annot8 (annot8.io) - Licensed under Apache-2.0. */
 package io.annot8.baleen.blocks;
 
+import java.util.Optional;
+
 import io.annot8.api.annotations.Annotation;
 import io.annot8.api.components.responses.ProcessorResponse;
 import io.annot8.api.data.Item;
@@ -9,8 +11,6 @@ import io.annot8.baleen.Constants;
 import io.annot8.common.components.AbstractProcessor;
 import io.annot8.common.data.bounds.SpanBounds;
 import io.annot8.common.data.content.Text;
-
-import java.util.Optional;
 
 public class TextBlockToContent extends AbstractProcessor {
 
@@ -58,7 +58,6 @@ public class TextBlockToContent extends AbstractProcessor {
 
     // Now delete the block, we'll process the subText from on
     text.getAnnotations().delete(block);
-
   }
 
   private void moveAnnotations(Text source, SpanBounds targetBounds, Text target) {

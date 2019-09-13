@@ -1,16 +1,18 @@
 /* Annot8 (annot8.io) - Licensed under Apache-2.0. */
 package io.annot8.baleen.utils;
 
-import io.annot8.common.data.content.Text;
-import io.annot8.testing.testimpl.content.TestStringContent;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.apache.uima.UIMAException;
 import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
 import org.junit.jupiter.api.Test;
+
 import uk.gov.dstl.baleen.types.metadata.Metadata;
 import uk.gov.dstl.baleen.uima.testing.JCasSingleton;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import io.annot8.common.data.content.Text;
+import io.annot8.testing.testimpl.content.TestStringContent;
 
 class JCasPopulatorTest {
 

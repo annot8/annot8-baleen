@@ -1,21 +1,24 @@
 /* Annot8 (annot8.io) - Licensed under Apache-2.0. */
 package io.annot8.baleen.utils;
 
+import static io.annot8.conventions.PropertyKeys.PROPERTY_KEY_SOURCE;
+
+import java.io.InputStream;
+import java.util.function.Consumer;
+
+import org.apache.uima.jcas.JCas;
+
+import uk.gov.dstl.baleen.exceptions.BaleenException;
+
 import io.annot8.api.components.responses.ProcessorResponse;
 import io.annot8.api.data.Content;
 import io.annot8.api.data.Item;
 import io.annot8.api.exceptions.BadConfigurationException;
 import io.annot8.common.components.AbstractProcessor;
+
 import io.committed.baleen.embedded.ConsumerOutputConverter;
 import io.committed.baleen.embedded.EmbeddableBaleen;
 import io.committed.baleen.embedded.EmbeddedBaleenFactory;
-import org.apache.uima.jcas.JCas;
-import uk.gov.dstl.baleen.exceptions.BaleenException;
-
-import java.io.InputStream;
-import java.util.function.Consumer;
-
-import static io.annot8.conventions.PropertyKeys.PROPERTY_KEY_SOURCE;
 
 public abstract class AbstractBaleenProcessor extends AbstractProcessor {
 
@@ -29,17 +32,17 @@ public abstract class AbstractBaleenProcessor extends AbstractProcessor {
   }
 
   protected EmbeddableBaleen getBaleen() {
-    if(baleen == null) {
+    if (baleen == null) {
       try {
         baleen =
-                EmbeddedBaleenFactory.createAndSetup(
-                        this.getClass().getSimpleName(), settings.getYaml(), settings.getPoolSize());
+            EmbeddedBaleenFactory.createAndSetup(
+                this.getClass().getSimpleName(), settings.getYaml(), settings.getPoolSize());
       } catch (BaleenException e) {
         throw new BadConfigurationException("Baleen can not be configured", e);
       }
     }
 
-    return  baleen;
+    return baleen;
   }
 
   @Override
@@ -51,7 +54,7 @@ public abstract class AbstractBaleenProcessor extends AbstractProcessor {
   }
 
   @Override
-  public ProcessorResponse process(Item item)  {
+  public ProcessorResponse process(Item item) {
     try {
       processItem(item);
       return ProcessorResponse.ok();
@@ -64,7 +67,7 @@ public abstract class AbstractBaleenProcessor extends AbstractProcessor {
   protected abstract void processItem(Item item) throws BaleenException;
 
   protected void processWithBaleen(
-          Content<?> content, InputStream is, Consumer<JCas> annotatorCreator, Consumer<JCas> consumer)
+      Content<?> content, InputStream is, Consumer<JCas> annotatorCreator, Consumer<JCas> consumer)
       throws BaleenException {
     String source = getSource(content);
     getBaleen().process(source, is, annotatorCreator, new ConsumerOutputConverter(consumer));

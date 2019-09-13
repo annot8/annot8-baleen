@@ -8,11 +8,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import io.annot8.api.annotations.Annotation;
-import io.annot8.api.annotations.Group;
-import io.annot8.api.exceptions.IncompleteException;
-import io.annot8.api.stores.AnnotationStore;
-import io.annot8.api.stores.GroupStore;
 import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.jcas.cas.TOP;
@@ -54,6 +49,10 @@ import uk.gov.dstl.baleen.uima.utils.UimaTypesUtils;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
+import io.annot8.api.annotations.Annotation;
+import io.annot8.api.annotations.Group;
+import io.annot8.api.stores.AnnotationStore;
+import io.annot8.api.stores.GroupStore;
 import io.annot8.baleen.Constants;
 import io.annot8.common.data.bounds.NoBounds;
 import io.annot8.common.data.bounds.SpanBounds;
@@ -247,70 +246,67 @@ public class JCasExtractor {
 
   private void addEntity(Entity entity) {
 
+    Annotation.Builder builder = createAnnotation(entity);
 
-      Annotation.Builder builder = createAnnotation(entity);
+    if (entity instanceof Person) {
+      Person e = (Person) entity;
 
-      if (entity instanceof Person) {
-        Person e = (Person) entity;
+      builder.withProperty("gender", e.getGender()).withProperty("title", e.getTitle());
 
-        builder.withProperty("gender", e.getGender()).withProperty("title", e.getTitle());
+    } else if (entity instanceof Location) {
+      Location e = (Location) entity;
+      builder.withProperty("geoJson", e.getGeoJson());
 
-      } else if (entity instanceof Location) {
-        Location e = (Location) entity;
-        builder.withProperty("geoJson", e.getGeoJson());
+    } else if (entity instanceof Organisation) {
+      // No props
+    } else if (entity instanceof Vehicle) {
+      Vehicle e = (Vehicle) entity;
+      builder.withProperty("vehicleId", e.getVehicleIdentifier());
+    } else if (entity instanceof Temporal) {
+      Temporal e = (Temporal) entity;
+      builder
+          .withProperty("precision", e.getPrecision())
+          .withProperty("scope", e.getScope())
+          .withProperty("temporalType", e.getTemporalType())
+          .withProperty("temporalStart", e.getTimestampStart())
+          .withProperty("temporalEnd", e.getTimestampStop());
+    } else if (entity instanceof Buzzword) {
+      Buzzword e = (Buzzword) entity;
+      builder.withProperty("tags", UimaTypesUtils.toList(e.getTags()));
+    } else if (entity instanceof Chemical) {
+      // No props
+    } else if (entity instanceof CommsIdentifier) {
+      builder.withProperty("subType", entity.getSubType());
+    } else if (entity instanceof DocumentReference) {
+      // No props
+    } else if (entity instanceof Frequency) {
+      // No props
+    } else if (entity instanceof MilitaryPlatform) {
+      // No props
+    } else if (entity instanceof Money) {
+      Money e = (Money) entity;
+      builder.withProperty("amount", e.getAmount()).withProperty("currency", e.getCurrency());
+    } else if (entity instanceof Nationality) {
+      Nationality e = (Nationality) entity;
+      builder.withProperty("countryCode", e.getCountryCode());
+    } else if (entity instanceof Quantity) {
+      Quantity e = (Quantity) entity;
+      builder
+          .withProperty("normalizedQuantity", e.getNormalizedQuantity())
+          .withProperty("normalizedUnit", e.getNormalizedUnit())
+          .withProperty("quantity", e.getQuantity())
+          .withProperty("unit", e.getUnit());
+    } else if (entity instanceof Url) {
+      // No props
+    } else if (entity instanceof Weapon) {
+      // No props
+    }
 
-      } else if (entity instanceof Organisation) {
-        // No props
-      } else if (entity instanceof Vehicle) {
-        Vehicle e = (Vehicle) entity;
-        builder.withProperty("vehicleId", e.getVehicleIdentifier());
-      } else if (entity instanceof Temporal) {
-        Temporal e = (Temporal) entity;
-        builder
-            .withProperty("precision", e.getPrecision())
-            .withProperty("scope", e.getScope())
-            .withProperty("temporalType", e.getTemporalType())
-            .withProperty("temporalStart", e.getTimestampStart())
-            .withProperty("temporalEnd", e.getTimestampStop());
-      } else if (entity instanceof Buzzword) {
-        Buzzword e = (Buzzword) entity;
-        builder.withProperty("tags", UimaTypesUtils.toList(e.getTags()));
-      } else if (entity instanceof Chemical) {
-        // No props
-      } else if (entity instanceof CommsIdentifier) {
-        builder.withProperty("subType", entity.getSubType());
-      } else if (entity instanceof DocumentReference) {
-        // No props
-      } else if (entity instanceof Frequency) {
-        // No props
-      } else if (entity instanceof MilitaryPlatform) {
-        // No props
-      } else if (entity instanceof Money) {
-        Money e = (Money) entity;
-        builder.withProperty("amount", e.getAmount()).withProperty("currency", e.getCurrency());
-      } else if (entity instanceof Nationality) {
-        Nationality e = (Nationality) entity;
-        builder.withProperty("countryCode", e.getCountryCode());
-      } else if (entity instanceof Quantity) {
-        Quantity e = (Quantity) entity;
-        builder
-            .withProperty("normalizedQuantity", e.getNormalizedQuantity())
-            .withProperty("normalizedUnit", e.getNormalizedUnit())
-            .withProperty("quantity", e.getQuantity())
-            .withProperty("unit", e.getUnit());
-      } else if (entity instanceof Url) {
-        // No props
-      } else if (entity instanceof Weapon) {
-        // No props
-      }
+    Annotation annotation = builder.save();
 
-      Annotation annotation = builder.save();
-
-      if (entity.getReferent() != null) {
-        referentAnnotations.put(entity.getReferent().getExternalId(), annotation);
-      }
-      baleenIdToAnnotation.put(entity.getExternalId(), annotation);
-
-
+    if (entity.getReferent() != null) {
+      referentAnnotations.put(entity.getReferent().getExternalId(), annotation);
+    }
+    baleenIdToAnnotation.put(entity.getExternalId(), annotation);
   }
 }

@@ -1,6 +1,14 @@
 /* Annot8 (annot8.io) - Licensed under Apache-2.0. */
 package io.annot8.baleen;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.io.File;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.junit.jupiter.api.Test;
+
 import io.annot8.api.annotations.Annotation;
 import io.annot8.api.capabilities.Capabilities;
 import io.annot8.api.components.*;
@@ -19,17 +27,11 @@ import io.annot8.components.files.sources.FileSystemSourceSettings;
 import io.annot8.implementations.pipeline.InMemoryPipelineRunner;
 import io.annot8.implementations.pipeline.SimplePipelineDescriptor;
 import io.annot8.testing.testimpl.TestItemFactory;
-import org.junit.jupiter.api.Test;
-
-import java.io.File;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class Annot8BaleenTest {
 
-  public static class PassthroughDescriptor<T extends Annot8Component> extends AbstractAnnot8ComponentDescriptor<T, NoSettings> {
+  public static class PassthroughDescriptor<T extends Annot8Component>
+      extends AbstractAnnot8ComponentDescriptor<T, NoSettings> {
 
     private final T instance;
 
@@ -50,14 +52,16 @@ public class Annot8BaleenTest {
     }
   }
 
-  public static class PassthroughSourceDescriptor<T extends Source> extends PassthroughDescriptor<T> implements SourceDescriptor<T, NoSettings> {
+  public static class PassthroughSourceDescriptor<T extends Source> extends PassthroughDescriptor<T>
+      implements SourceDescriptor<T, NoSettings> {
 
     public PassthroughSourceDescriptor(T instance) {
       super(instance);
     }
   }
 
-  public static class PassthroughProcessorDescriptor<T extends Processor> extends PassthroughDescriptor<T> implements ProcessorDescriptor<T, NoSettings> {
+  public static class PassthroughProcessorDescriptor<T extends Processor>
+      extends PassthroughDescriptor<T> implements ProcessorDescriptor<T, NoSettings> {
 
     public PassthroughProcessorDescriptor(T instance) {
       super(instance);
@@ -69,7 +73,8 @@ public class Annot8BaleenTest {
     FileSystemSourceSettings settings = new FileSystemSourceSettings(new File("./data").toPath());
     settings.setWatching(false);
 
-    SimplePipelineDescriptor spd = new SimplePipelineDescriptor.Builder()
+    SimplePipelineDescriptor spd =
+        new SimplePipelineDescriptor.Builder()
             .withName("Test")
             .withSource(new PassthroughSourceDescriptor<>(new FileSystemSource(settings)))
             .withProcessor(new PassthroughProcessorDescriptor(new BaleenCollectionReader()))
@@ -78,12 +83,11 @@ public class Annot8BaleenTest {
             .withDescription("Test")
             .build();
 
-
     TestItemFactory itemFactory = new TestItemFactory();
     InMemoryPipelineRunner runner = new InMemoryPipelineRunner(spd, itemFactory);
     runner.run();
 
-    List<Item> items =itemFactory.getCreatedItems();
+    List<Item> items = itemFactory.getCreatedItems();
 
     assertThat(items).hasSize(1);
 
