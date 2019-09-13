@@ -10,6 +10,13 @@ import io.annot8.common.data.content.Text;
 
 public class BaleenAnnotator extends AbstractProcessorDescriptor<BaleenAnnotators, BaleenSettings> {
 
+    public BaleenAnnotator() {
+        super();
+    }
+
+    public BaleenAnnotator(BaleenSettings settings) {
+        setSettings(settings);
+    }
 
     @Override
     public Capabilities capabilities() {

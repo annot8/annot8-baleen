@@ -3,7 +3,7 @@ package io.annot8.baleen.utils;
 
 import org.apache.uima.UIMAException;
 import org.apache.uima.jcas.JCas;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import uk.gov.dstl.baleen.types.common.Person;
 import uk.gov.dstl.baleen.uima.testing.JCasSingleton;
 

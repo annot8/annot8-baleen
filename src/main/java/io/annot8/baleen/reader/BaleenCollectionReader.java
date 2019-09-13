@@ -13,8 +13,8 @@ import java.io.InputStream;
 
 public class BaleenCollectionReader extends AbstractBaleenProcessor {
 
-  BaleenCollectionReader(BaleenSettings settings) {
-    super(settings);
+  public BaleenCollectionReader() {
+    super(new BaleenSettings(""));
   }
 
   public void processItem(Item item) {

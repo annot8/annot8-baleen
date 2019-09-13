@@ -5,7 +5,7 @@ import io.annot8.testing.testimpl.TestItem;
 import io.annot8.testing.testimpl.content.TestStringContent;
 import org.apache.uima.UIMAException;
 import org.apache.uima.jcas.JCas;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import uk.gov.dstl.baleen.uima.testing.JCasSingleton;
 
 class BaleenAnnotatorConsumerTest {
