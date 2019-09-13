@@ -1,14 +1,14 @@
 /* Annot8 (annot8.io) - Licensed under Apache-2.0. */
 package io.annot8.baleen.utils;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.apache.uima.UIMAException;
 import org.apache.uima.jcas.JCas;
-import org.junit.jupiter.api.Test;
-
+import org.junit.Test;
 import uk.gov.dstl.baleen.types.common.Person;
 import uk.gov.dstl.baleen.uima.testing.JCasSingleton;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 
 class BaleenTypeMapperTest {
 

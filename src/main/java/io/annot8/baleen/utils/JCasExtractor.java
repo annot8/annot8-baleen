@@ -8,6 +8,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import io.annot8.api.annotations.Annotation;
+import io.annot8.api.annotations.Group;
+import io.annot8.api.exceptions.IncompleteException;
+import io.annot8.api.stores.AnnotationStore;
+import io.annot8.api.stores.GroupStore;
 import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.jcas.cas.TOP;
@@ -52,12 +57,6 @@ import com.google.common.collect.Multimap;
 import io.annot8.baleen.Constants;
 import io.annot8.common.data.bounds.NoBounds;
 import io.annot8.common.data.bounds.SpanBounds;
-import io.annot8.core.annotations.Annotation;
-import io.annot8.core.annotations.Annotation.Builder;
-import io.annot8.core.annotations.Group;
-import io.annot8.core.exceptions.IncompleteException;
-import io.annot8.core.stores.AnnotationStore;
-import io.annot8.core.stores.GroupStore;
 
 public class JCasExtractor {
 
@@ -116,7 +115,7 @@ public class JCasExtractor {
   }
 
   private Annotation.Builder createAnnotation(BaleenAnnotation t) {
-    Builder builder =
+    Annotation.Builder builder =
         annotations
             .create()
             .withType(typeMapper.fromBaleenToAnnot8(t).orElse("unknown"))
@@ -147,7 +146,7 @@ public class JCasExtractor {
   }
 
   private void addPhraseChunk(PhraseChunk t) {
-    Builder builder = createAnnotation(t).withProperty("chunkType", t.getChunkType());
+    Annotation.Builder builder = createAnnotation(t).withProperty("chunkType", t.getChunkType());
     // TODO: Unclear what to do with head word etc
 
     if (t.getHeadWord() != null) {
@@ -248,9 +247,8 @@ public class JCasExtractor {
 
   private void addEntity(Entity entity) {
 
-    try {
 
-      Builder builder = createAnnotation(entity);
+      Annotation.Builder builder = createAnnotation(entity);
 
       if (entity instanceof Person) {
         Person e = (Person) entity;
@@ -313,8 +311,6 @@ public class JCasExtractor {
       }
       baleenIdToAnnotation.put(entity.getExternalId(), annotation);
 
-    } catch (IncompleteException e) {
-      LOGGER.error(ANNOTATION_ERROR, e.getClass().getSimpleName(), e);
-    }
+
   }
 }

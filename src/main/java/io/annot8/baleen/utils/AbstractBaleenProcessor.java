@@ -1,45 +1,45 @@
 /* Annot8 (annot8.io) - Licensed under Apache-2.0. */
 package io.annot8.baleen.utils;
 
-import static io.annot8.conventions.PropertyKeys.PROPERTY_KEY_SOURCE;
+import io.annot8.api.components.responses.ProcessorResponse;
+import io.annot8.api.data.Content;
+import io.annot8.api.data.Item;
+import io.annot8.api.exceptions.BadConfigurationException;
+import io.annot8.common.components.AbstractProcessor;
+import io.committed.baleen.embedded.ConsumerOutputConverter;
+import io.committed.baleen.embedded.EmbeddableBaleen;
+import io.committed.baleen.embedded.EmbeddedBaleenFactory;
+import org.apache.uima.jcas.JCas;
+import uk.gov.dstl.baleen.exceptions.BaleenException;
 
 import java.io.InputStream;
 import java.util.function.Consumer;
 
-import org.apache.uima.jcas.JCas;
+import static io.annot8.conventions.PropertyKeys.PROPERTY_KEY_SOURCE;
 
-import uk.gov.dstl.baleen.exceptions.BaleenException;
-
-import io.annot8.components.base.components.AbstractComponent;
-import io.annot8.core.components.Processor;
-import io.annot8.core.components.responses.ProcessorResponse;
-import io.annot8.core.context.Context;
-import io.annot8.core.data.Content;
-import io.annot8.core.data.Item;
-import io.annot8.core.exceptions.Annot8Exception;
-import io.annot8.core.exceptions.BadConfigurationException;
-
-import io.committed.baleen.embedded.ConsumerOutputConverter;
-import io.committed.baleen.embedded.EmbeddableBaleen;
-import io.committed.baleen.embedded.EmbeddedBaleenFactory;
-
-public abstract class AbstractBaleenProcessor extends AbstractComponent implements Processor {
+public abstract class AbstractBaleenProcessor extends AbstractProcessor {
 
   private static final String DEFAULT_SOURCE = "annot8";
-  private static final int DEFAULT_POOL_SIZE = 1;
 
   private EmbeddableBaleen baleen;
+  private BaleenSettings settings;
 
-  @Override
-  public void configure(Context context) throws BadConfigurationException {
+  public AbstractBaleenProcessor(BaleenSettings settings) {
+    this.settings = settings;
+  }
 
-    try {
-      baleen =
-          EmbeddedBaleenFactory.createAndSetup(
-              this.getClass().getSimpleName(), getYaml(context), getPoolSize(context));
-    } catch (BaleenException e) {
-      throw new BadConfigurationException("Baleen can not be configured", e);
+  protected EmbeddableBaleen getBaleen() {
+    if(baleen == null) {
+      try {
+        baleen =
+                EmbeddedBaleenFactory.createAndSetup(
+                        this.getClass().getSimpleName(), settings.getYaml(), settings.getPoolSize());
+      } catch (BaleenException e) {
+        throw new BadConfigurationException("Baleen can not be configured", e);
+      }
     }
+
+    return  baleen;
   }
 
   @Override
@@ -50,18 +50,8 @@ public abstract class AbstractBaleenProcessor extends AbstractComponent implemen
     }
   }
 
-  protected abstract String getYaml(Context context);
-
-  protected int getPoolSize(Context context) {
-    return DEFAULT_POOL_SIZE;
-  }
-
   @Override
-  public ProcessorResponse process(Item item) throws Annot8Exception {
-    if (baleen == null) {
-      return ProcessorResponse.processingError();
-    }
-
+  public ProcessorResponse process(Item item)  {
     try {
       processItem(item);
       return ProcessorResponse.ok();
@@ -71,19 +61,19 @@ public abstract class AbstractBaleenProcessor extends AbstractComponent implemen
     }
   }
 
-  protected abstract void processItem(Item item) throws BaleenException, Annot8Exception;
+  protected abstract void processItem(Item item) throws BaleenException;
 
   protected void processWithBaleen(
-      Content<?> content, InputStream is, Consumer<JCas> annotatorCreator, Consumer<JCas> consumer)
+          Content<?> content, InputStream is, Consumer<JCas> annotatorCreator, Consumer<JCas> consumer)
       throws BaleenException {
     String source = getSource(content);
-    baleen.process(source, is, annotatorCreator, new ConsumerOutputConverter(consumer));
+    getBaleen().process(source, is, annotatorCreator, new ConsumerOutputConverter(consumer));
   }
 
   protected void processWithBaleen(Content<?> content, InputStream is, Consumer<JCas> consumer)
       throws BaleenException {
     String source = getSource(content);
-    baleen.process(source, is, new ConsumerOutputConverter(consumer));
+    getBaleen().process(source, is, new ConsumerOutputConverter(consumer));
   }
 
   private String getSource(Content<?> content) {

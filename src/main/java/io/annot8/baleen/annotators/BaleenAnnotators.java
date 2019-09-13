@@ -1,28 +1,21 @@
 /* Annot8 (annot8.io) - Licensed under Apache-2.0. */
 package io.annot8.baleen.annotators;
 
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.Optional;
-
-import org.apache.commons.io.IOUtils;
-
-import uk.gov.dstl.baleen.exceptions.BaleenException;
-
+import io.annot8.api.data.Item;
 import io.annot8.baleen.utils.AbstractBaleenProcessor;
+import io.annot8.baleen.utils.BaleenSettings;
 import io.annot8.baleen.utils.JCasPopulator;
 import io.annot8.common.data.content.Text;
-import io.annot8.core.context.Context;
-import io.annot8.core.data.Item;
-import io.annot8.core.settings.SettingsClass;
+import org.apache.commons.io.IOUtils;
+import uk.gov.dstl.baleen.exceptions.BaleenException;
 
-@SettingsClass(BaleenAnnotatorSettings.class)
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+
 public class BaleenAnnotators extends AbstractBaleenProcessor {
 
-  @Override
-  protected String getYaml(Context context) {
-    Optional<BaleenAnnotatorSettings> settings = context.getSettings(BaleenAnnotatorSettings.class);
-    return settings.map(BaleenAnnotatorSettings::getYaml).orElse("");
+  public BaleenAnnotators(BaleenSettings settings) {
+    super(settings);
   }
 
   public void processItem(Item item) {

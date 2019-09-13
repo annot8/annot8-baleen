@@ -2,16 +2,22 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns="http://maven.apache.org/POM/4.0.0"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
   <parent>
     <groupId>io.annot8</groupId>
     <artifactId>annot8-components</artifactId>
     <version>0.4.0-SNAPSHOT</version>
   </parent>
-  <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>annot8-baleen</artifactId>
+  <groupId>io.annot8</groupId>
+  <artifactId>annot8-baleen2</artifactId>
+  <version>0.4.0-SNAPSHOT</version>
 
   <properties>
+    <annot8.version>0.4.0-SNAPSHOT</annot8.version>
+    <annot8-components.version>0.4.0-SNAPSHOT</annot8-components.version>
+
     <baleen.version>2.7.0</baleen.version>
     <embedded-baleen.version>0.2</embedded-baleen.version>
   </properties>
@@ -27,11 +33,15 @@
     </dependency>
     <dependency>
       <groupId>io.annot8</groupId>
+      <artifactId>annot8-common-components</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.annot8</groupId>
       <artifactId>annot8-conventions</artifactId>
     </dependency>
     <dependency>
       <groupId>io.annot8</groupId>
-      <artifactId>annot8-components-base</artifactId>
+      <artifactId>annot8-pipeline-implementation</artifactId>
     </dependency>
 
     <!-- Baleen -->
@@ -67,6 +77,7 @@
       <artifactId>assertj-core</artifactId>
       <scope>test</scope>
     </dependency>
+
   </dependencies>
 
 

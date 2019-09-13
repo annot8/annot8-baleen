@@ -1,14 +1,12 @@
 /* Annot8 (annot8.io) - Licensed under Apache-2.0. */
 package io.annot8.baleen.utils;
 
-import java.util.function.Consumer;
-
+import io.annot8.common.data.content.Text;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.jcas.tcas.DocumentAnnotation;
-
 import uk.gov.dstl.baleen.types.metadata.Metadata;
 
-import io.annot8.common.data.content.Text;
+import java.util.function.Consumer;
 
 public class JCasPopulator implements Consumer<JCas> {
 
@@ -37,8 +35,8 @@ public class JCasPopulator implements Consumer<JCas> {
         .forEach(
             a -> {
               Metadata m = new Metadata(jCas);
-              a.getProperties().getProperty("key", String.class).ifPresent(m::setKey);
-              a.getProperties().getProperty("value", String.class).ifPresent(m::setValue);
+              a.getProperties().get("key", String.class).ifPresent(m::setKey);
+              a.getProperties().get("value", String.class).ifPresent(m::setValue);
 
               m.addToIndexes();
             });
