@@ -37,8 +37,8 @@ public class JCasPopulator implements Consumer<JCas> {
         .forEach(
             a -> {
               Metadata m = new Metadata(jCas);
-              a.getProperties().getProperty("key", String.class).ifPresent(m::setKey);
-              a.getProperties().getProperty("value", String.class).ifPresent(m::setValue);
+              a.getProperties().get("key", String.class).ifPresent(m::setKey);
+              a.getProperties().get("value", String.class).ifPresent(m::setValue);
 
               m.addToIndexes();
             });

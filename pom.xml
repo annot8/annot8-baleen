@@ -2,16 +2,22 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns="http://maven.apache.org/POM/4.0.0"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <parent>
-    <groupId>io.annot8</groupId>
-    <artifactId>annot8-parent</artifactId>
-    <version>0.2.0</version>
-  </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>annot8-baleen</artifactId>
+  <parent>
+    <groupId>io.annot8</groupId>
+    <artifactId>annot8-components</artifactId>
+    <version>0.4.0-SNAPSHOT</version>
+  </parent>
+
+  <groupId>io.annot8</groupId>
+  <artifactId>annot8-baleen2</artifactId>
+  <version>0.4.0-SNAPSHOT</version>
 
   <properties>
+    <annot8.version>0.4.0-SNAPSHOT</annot8.version>
+    <annot8-components.version>0.4.0-SNAPSHOT</annot8-components.version>
+
     <baleen.version>2.6.0</baleen.version>
     <embedded-baleen.version>0.2</embedded-baleen.version>
   </properties>
@@ -19,7 +25,7 @@
   <dependencies>
     <dependency>
       <groupId>io.annot8</groupId>
-      <artifactId>annot8-core</artifactId>
+      <artifactId>annot8-api</artifactId>
     </dependency>
     <dependency>
       <groupId>io.annot8</groupId>
@@ -27,12 +33,13 @@
     </dependency>
     <dependency>
       <groupId>io.annot8</groupId>
-      <artifactId>annot8-conventions</artifactId>
+      <artifactId>annot8-common-components</artifactId>
     </dependency>
     <dependency>
       <groupId>io.annot8</groupId>
-      <artifactId>annot8-components-base</artifactId>
+      <artifactId>annot8-conventions</artifactId>
     </dependency>
+
 
     <!-- Baleen -->
     <dependency>
@@ -59,7 +66,14 @@
     </dependency>
     <dependency>
       <groupId>io.annot8</groupId>
+      <artifactId>annot8-pipeline-implementation</artifactId>
+      <version>${annot8.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.annot8</groupId>
       <artifactId>annot8-components-files</artifactId>
+      <version>${annot8.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -67,25 +81,8 @@
       <artifactId>assertj-core</artifactId>
       <scope>test</scope>
     </dependency>
+
   </dependencies>
 
-  <profiles>
-    <profile>
-      <id>travis</id>
-      <repositories>
-        <repository>
-          <id>packagecloud-annot8</id>
-          <url>https://packagecloud.io/committed/annot8/maven2</url>
-          <releases>
-            <!-- Don't look for releases, use Central -->
-            <enabled>false</enabled>
-          </releases>
-          <snapshots>
-            <enabled>true</enabled>
-          </snapshots>
-        </repository>
-      </repositories>
-    </profile>
-  </profiles>
 
 </project>

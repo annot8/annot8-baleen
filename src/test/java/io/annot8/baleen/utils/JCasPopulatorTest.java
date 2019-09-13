@@ -12,13 +12,12 @@ import uk.gov.dstl.baleen.types.metadata.Metadata;
 import uk.gov.dstl.baleen.uima.testing.JCasSingleton;
 
 import io.annot8.common.data.content.Text;
-import io.annot8.core.exceptions.IncompleteException;
 import io.annot8.testing.testimpl.content.TestStringContent;
 
 class JCasPopulatorTest {
 
   @Test
-  void accept() throws UIMAException, IncompleteException {
+  void accept() throws UIMAException {
     JCas jCas = JCasSingleton.getJCasInstance();
     Text text = new TestStringContent();
     JCasPopulator populator = new JCasPopulator(text);

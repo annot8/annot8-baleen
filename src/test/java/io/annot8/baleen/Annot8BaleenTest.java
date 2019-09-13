@@ -5,58 +5,89 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.File;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
-import io.annot8.baleen.annotators.BaleenAnnotatorSettings;
-import io.annot8.baleen.annotators.BaleenAnnotators;
+import io.annot8.api.annotations.Annotation;
+import io.annot8.api.capabilities.Capabilities;
+import io.annot8.api.components.*;
+import io.annot8.api.context.Context;
+import io.annot8.api.data.Item;
+import io.annot8.api.settings.NoSettings;
+import io.annot8.baleen.annotators.BaleenAnnotator;
 import io.annot8.baleen.blocks.TextBlockToContent;
 import io.annot8.baleen.reader.BaleenCollectionReader;
+import io.annot8.baleen.utils.BaleenSettings;
+import io.annot8.common.components.AbstractAnnot8ComponentDescriptor;
+import io.annot8.common.components.capabilities.SimpleCapabilities;
 import io.annot8.common.data.content.Text;
-import io.annot8.common.pipelines.elements.Pipeline;
-import io.annot8.common.pipelines.elements.PipelineBuilder;
-import io.annot8.common.pipelines.queues.MemoryItemQueue;
-import io.annot8.common.pipelines.simple.SimplePipeBuilder;
-import io.annot8.common.pipelines.simple.SimplePipelineBuilder;
 import io.annot8.components.files.sources.FileSystemSource;
 import io.annot8.components.files.sources.FileSystemSourceSettings;
-import io.annot8.core.data.Item;
-import io.annot8.core.exceptions.BadConfigurationException;
-import io.annot8.core.exceptions.IncompleteException;
-import io.annot8.core.exceptions.MissingResourceException;
-import io.annot8.testing.testimpl.TestBaseItemFactory;
-import io.annot8.testing.testimpl.TestContext;
-import io.annot8.testing.testimpl.components.ItemCollector;
+import io.annot8.implementations.pipeline.InMemoryPipelineRunner;
+import io.annot8.implementations.pipeline.SimplePipelineDescriptor;
+import io.annot8.testing.testimpl.TestItemFactory;
 
 public class Annot8BaleenTest {
 
+  public static class PassthroughDescriptor<T extends Annot8Component>
+      extends AbstractAnnot8ComponentDescriptor<T, NoSettings> {
+
+    private final T instance;
+
+    public PassthroughDescriptor(T instance) {
+      this.instance = instance;
+      setName(instance.getClass().getSimpleName());
+      setSettings(NoSettings.getInstance());
+    }
+
+    @Override
+    public T create(Context context) {
+      return instance;
+    }
+
+    @Override
+    public Capabilities capabilities() {
+      return new SimpleCapabilities.Builder().build();
+    }
+  }
+
+  public static class PassthroughSourceDescriptor<T extends Source> extends PassthroughDescriptor<T>
+      implements SourceDescriptor<T, NoSettings> {
+
+    public PassthroughSourceDescriptor(T instance) {
+      super(instance);
+    }
+  }
+
+  public static class PassthroughProcessorDescriptor<T extends Processor>
+      extends PassthroughDescriptor<T> implements ProcessorDescriptor<T, NoSettings> {
+
+    public PassthroughProcessorDescriptor(T instance) {
+      super(instance);
+    }
+  }
+
   @Test
-  public void test()
-      throws IncompleteException, BadConfigurationException, MissingResourceException {
-
-    ItemCollector collector = new ItemCollector();
-
-    PipelineBuilder spb = new SimplePipelineBuilder();
-
+  public void test() {
     FileSystemSourceSettings settings = new FileSystemSourceSettings(new File("./data").toPath());
     settings.setWatching(false);
 
-    Pipeline pipeline =
-        spb.addSource(new FileSystemSource(), settings)
-            .addPipe(
-                new SimplePipeBuilder()
-                    .addProcessor(new BaleenCollectionReader())
-                    .addProcessor(new TextBlockToContent())
-                    .addProcessor(new BaleenAnnotators(), new BaleenAnnotatorSettings())
-                    .addProcessor(collector))
-            .withItemFactory(new TestBaseItemFactory())
-            .withQueue(new MemoryItemQueue())
+    SimplePipelineDescriptor spd =
+        new SimplePipelineDescriptor.Builder()
+            .withName("Test")
+            .withSource(new PassthroughSourceDescriptor<>(new FileSystemSource(settings)))
+            .withProcessor(new PassthroughProcessorDescriptor(new BaleenCollectionReader()))
+            .withProcessor(new PassthroughProcessorDescriptor(new TextBlockToContent()))
+            .withProcessor(new BaleenAnnotator(new BaleenSettings("annotators:\n  - regex.Email")))
+            .withDescription("Test")
             .build();
 
-    pipeline.configure(new TestContext());
-    pipeline.run();
+    TestItemFactory itemFactory = new TestItemFactory();
+    InMemoryPipelineRunner runner = new InMemoryPipelineRunner(spd, itemFactory);
+    runner.run();
 
-    List<Item> items = collector.getItems();
+    List<Item> items = itemFactory.getCreatedItems();
 
     assertThat(items).hasSize(1);
 
@@ -64,6 +95,8 @@ public class Annot8BaleenTest {
 
     Text text = item.getContents(Text.class).findFirst().get();
 
-    assertThat(text.getAnnotations().getAll()).anyMatch(a -> a.getType().equals("entity/email"));
+    List<Annotation> annotations = text.getAnnotations().getAll().collect(Collectors.toList());
+
+    assertThat(annotations).anyMatch(a -> a.getType().equals("entity/email"));
   }
 }

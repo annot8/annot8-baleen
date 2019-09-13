@@ -5,9 +5,9 @@ import java.util.function.Consumer;
 
 import org.apache.uima.jcas.JCas;
 
+import io.annot8.api.data.Item;
 import io.annot8.baleen.utils.JCasExtractor;
 import io.annot8.common.data.content.Text;
-import io.annot8.core.data.Item;
 
 public class BaleenAnnotatorConsumer implements Consumer<JCas> {
 

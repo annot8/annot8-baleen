@@ -1,18 +1,18 @@
 /* Annot8 (annot8.io) - Licensed under Apache-2.0. */
 package io.annot8.baleen.blocks;
 
-import io.annot8.baleen.Constants;
-import io.annot8.common.data.bounds.SpanBounds;
-import io.annot8.common.data.content.Text;
-import io.annot8.components.base.components.AbstractComponent;
-import io.annot8.core.annotations.Annotation;
-import io.annot8.core.components.Processor;
-import io.annot8.core.components.responses.ProcessorResponse;
-import io.annot8.core.data.Item;
-import io.annot8.core.stores.AnnotationStore;
 import java.util.Optional;
 
-public class TextBlockToContent extends AbstractComponent implements Processor {
+import io.annot8.api.annotations.Annotation;
+import io.annot8.api.components.responses.ProcessorResponse;
+import io.annot8.api.data.Item;
+import io.annot8.api.stores.AnnotationStore;
+import io.annot8.baleen.Constants;
+import io.annot8.common.components.AbstractProcessor;
+import io.annot8.common.data.bounds.SpanBounds;
+import io.annot8.common.data.content.Text;
+
+public class TextBlockToContent extends AbstractProcessor {
 
   @Override
   public ProcessorResponse process(Item item) {
@@ -46,8 +46,8 @@ public class TextBlockToContent extends AbstractComponent implements Processor {
     SpanBounds bounds = blockBounds.get();
 
     Text subText =
-        item.create(Text.class)
-            .withName(makeContentName(text, bounds))
+        item.createContent(Text.class)
+            .withDescription(makeDescription(text, bounds))
             .withProperty(Constants.BLOCK_BEGIN, bounds.getBegin())
             .withProperty(Constants.BLOCK_END, bounds.getEnd())
             .withData(dataInBlock.get())
@@ -58,7 +58,6 @@ public class TextBlockToContent extends AbstractComponent implements Processor {
 
     // Now delete the block, we'll process the subText from on
     text.getAnnotations().delete(block);
-
   }
 
   private void moveAnnotations(Text source, SpanBounds targetBounds, Text target) {
@@ -84,7 +83,7 @@ public class TextBlockToContent extends AbstractComponent implements Processor {
             });
   }
 
-  private String makeContentName(Text text, SpanBounds bounds) {
-    return String.format("%s-block[%d,%d]", text.getName(), bounds.getBegin(), bounds.getEnd());
+  private String makeDescription(Text text, SpanBounds bounds) {
+    return String.format("%s-block[%d,%d]", text.getId(), bounds.getBegin(), bounds.getEnd());
   }
 }
