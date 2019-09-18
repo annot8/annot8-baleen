@@ -12,14 +12,12 @@
 
   <groupId>io.annot8</groupId>
   <artifactId>annot8-baleen2</artifactId>
-  <version>0.4.0-SNAPSHOT</version>
 
   <properties>
-    <annot8.version>0.4.0-SNAPSHOT</annot8.version>
-    <annot8-components.version>0.4.0-SNAPSHOT</annot8-components.version>
+    <annot8-components.version>${project.version}</annot8-components.version>
 
-    <baleen.version>2.6.0</baleen.version>
-    <embedded-baleen.version>0.2</embedded-baleen.version>
+    <baleen.version>2.7.0</baleen.version>
+    <embedded-baleen.version>0.3</embedded-baleen.version>
   </properties>
 
   <dependencies>
