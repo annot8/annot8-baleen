@@ -76,7 +76,7 @@ public class Annot8BaleenTest {
     SimplePipelineDescriptor spd =
         new SimplePipelineDescriptor.Builder()
             .withName("Test")
-            .withSource(new PassthroughSourceDescriptor<>(new FileSystemSource(settings)))
+            .withSource(new PassthroughSourceDescriptor<>(new FileSystemSource.Source(settings)))
             .withProcessor(new PassthroughProcessorDescriptor(new BaleenCollectionReader()))
             .withProcessor(new PassthroughProcessorDescriptor(new TextBlockToContent()))
             .withProcessor(new BaleenAnnotator(new BaleenSettings("annotators:\n  - regex.Email")))
