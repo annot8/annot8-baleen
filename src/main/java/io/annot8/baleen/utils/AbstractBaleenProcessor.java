@@ -3,22 +3,18 @@ package io.annot8.baleen.utils;
 
 import static io.annot8.conventions.PropertyKeys.PROPERTY_KEY_SOURCE;
 
-import java.io.InputStream;
-import java.util.function.Consumer;
-
-import org.apache.uima.jcas.JCas;
-
-import uk.gov.dstl.baleen.exceptions.BaleenException;
-
 import io.annot8.api.components.responses.ProcessorResponse;
 import io.annot8.api.data.Content;
 import io.annot8.api.data.Item;
 import io.annot8.api.exceptions.BadConfigurationException;
 import io.annot8.common.components.AbstractProcessor;
-
 import io.committed.baleen.embedded.ConsumerOutputConverter;
 import io.committed.baleen.embedded.EmbeddableBaleen;
 import io.committed.baleen.embedded.EmbeddedBaleenFactory;
+import java.io.InputStream;
+import java.util.function.Consumer;
+import org.apache.uima.jcas.JCas;
+import uk.gov.dstl.baleen.exceptions.BaleenException;
 
 public abstract class AbstractBaleenProcessor extends AbstractProcessor {
 

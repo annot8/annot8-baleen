@@ -1,14 +1,12 @@
 /* Annot8 (annot8.io) - Licensed under Apache-2.0. */
 package io.annot8.baleen.annotators;
 
+import io.annot8.testing.testimpl.TestItem;
+import io.annot8.testing.testimpl.content.TestStringContent;
 import org.apache.uima.UIMAException;
 import org.apache.uima.jcas.JCas;
 import org.junit.jupiter.api.Test;
-
 import uk.gov.dstl.baleen.uima.testing.JCasSingleton;
-
-import io.annot8.testing.testimpl.TestItem;
-import io.annot8.testing.testimpl.content.TestStringContent;
 
 class BaleenAnnotatorConsumerTest {
 

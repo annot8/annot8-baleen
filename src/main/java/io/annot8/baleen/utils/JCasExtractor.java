@@ -4,16 +4,23 @@ package io.annot8.baleen.utils;
 import static io.annot8.baleen.Constants.BALEEN_ID;
 import static io.annot8.baleen.Constants.BALEEN_VALUE;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+import io.annot8.api.annotations.Annotation;
+import io.annot8.api.annotations.Group;
+import io.annot8.api.stores.AnnotationStore;
+import io.annot8.api.stores.GroupStore;
+import io.annot8.baleen.Constants;
+import io.annot8.common.data.bounds.NoBounds;
+import io.annot8.common.data.bounds.SpanBounds;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
-
 import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.jcas.cas.TOP;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import uk.gov.dstl.baleen.types.BaleenAnnotation;
 import uk.gov.dstl.baleen.types.common.Buzzword;
 import uk.gov.dstl.baleen.types.common.Chemical;
@@ -45,17 +52,6 @@ import uk.gov.dstl.baleen.types.semantic.Relation;
 import uk.gov.dstl.baleen.types.semantic.Temporal;
 import uk.gov.dstl.baleen.types.structure.Structure;
 import uk.gov.dstl.baleen.uima.utils.UimaTypesUtils;
-
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
-
-import io.annot8.api.annotations.Annotation;
-import io.annot8.api.annotations.Group;
-import io.annot8.api.stores.AnnotationStore;
-import io.annot8.api.stores.GroupStore;
-import io.annot8.baleen.Constants;
-import io.annot8.common.data.bounds.NoBounds;
-import io.annot8.common.data.bounds.SpanBounds;
 
 public class JCasExtractor {
 

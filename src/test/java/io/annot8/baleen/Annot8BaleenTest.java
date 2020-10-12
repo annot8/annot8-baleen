@@ -3,12 +3,6 @@ package io.annot8.baleen;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.io.File;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.junit.jupiter.api.Test;
-
 import io.annot8.api.annotations.Annotation;
 import io.annot8.api.capabilities.Capabilities;
 import io.annot8.api.components.*;
@@ -27,6 +21,10 @@ import io.annot8.components.files.sources.FileSystemSourceSettings;
 import io.annot8.implementations.pipeline.InMemoryPipelineRunner;
 import io.annot8.implementations.pipeline.SimplePipelineDescriptor;
 import io.annot8.testing.testimpl.TestItemFactory;
+import java.io.File;
+import java.util.List;
+import java.util.stream.Collectors;
+import org.junit.jupiter.api.Test;
 
 public class Annot8BaleenTest {
 

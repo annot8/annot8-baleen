@@ -3,10 +3,11 @@ package io.annot8.baleen.utils;
 
 import static uk.gov.dstl.baleen.consumers.utils.ConsumerUtils.toCamelCase;
 
+import io.annot8.baleen.Constants;
+import io.annot8.conventions.AnnotationTypes;
+import io.annot8.conventions.PathUtils;
 import java.util.Optional;
-
 import org.apache.uima.jcas.cas.TOP;
-
 import uk.gov.dstl.baleen.types.common.Buzzword;
 import uk.gov.dstl.baleen.types.common.Chemical;
 import uk.gov.dstl.baleen.types.common.CommsIdentifier;
@@ -31,10 +32,6 @@ import uk.gov.dstl.baleen.types.semantic.Entity;
 import uk.gov.dstl.baleen.types.semantic.Location;
 import uk.gov.dstl.baleen.types.semantic.Temporal;
 import uk.gov.dstl.baleen.types.structure.Structure;
-
-import io.annot8.baleen.Constants;
-import io.annot8.conventions.AnnotationTypes;
-import io.annot8.conventions.PathUtils;
 
 public class BaleenTypeMapper {
 

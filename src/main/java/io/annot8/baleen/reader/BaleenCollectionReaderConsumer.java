@@ -1,20 +1,17 @@
 /* Annot8 (annot8.io) - Licensed under Apache-2.0. */
 package io.annot8.baleen.reader;
 
-import java.util.function.Consumer;
-
-import org.apache.uima.jcas.JCas;
-import org.apache.uima.jcas.tcas.DocumentAnnotation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import uk.gov.dstl.baleen.uima.utils.UimaTypesUtils;
-
 import io.annot8.api.data.Item;
 import io.annot8.api.stores.AnnotationStore;
 import io.annot8.baleen.Constants;
 import io.annot8.baleen.utils.JCasExtractor;
 import io.annot8.common.data.content.Text;
+import java.util.function.Consumer;
+import org.apache.uima.jcas.JCas;
+import org.apache.uima.jcas.tcas.DocumentAnnotation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import uk.gov.dstl.baleen.uima.utils.UimaTypesUtils;
 
 public class BaleenCollectionReaderConsumer implements Consumer<JCas> {
 
