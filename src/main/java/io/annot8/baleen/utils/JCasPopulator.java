@@ -1,14 +1,11 @@
 /* Annot8 (annot8.io) - Licensed under Apache-2.0. */
 package io.annot8.baleen.utils;
 
+import io.annot8.common.data.content.Text;
 import java.util.function.Consumer;
-
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.jcas.tcas.DocumentAnnotation;
-
 import uk.gov.dstl.baleen.types.metadata.Metadata;
-
-import io.annot8.common.data.content.Text;
 
 public class JCasPopulator implements Consumer<JCas> {
 
